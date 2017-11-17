@@ -14,8 +14,8 @@
 import copy
 import time
 
-from heat_integrationtests.common import test
-from heat_integrationtests.functional import functional_base
+from heat_tempest_plugin.common import test
+from heat_tempest_plugin.tests.functional import functional_base
 
 _test_template = {
     'heat_template_version': 'pike',

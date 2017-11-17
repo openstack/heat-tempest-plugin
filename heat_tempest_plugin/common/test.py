@@ -73,7 +73,8 @@ def requires_convergence(test_method):
 
     The decorated test will be skipped when convergence is disabled.
     '''
-    convergence_enabled = config.CONF.heat_plugin.convergence_engine_enabled
+    plugin = config.CONF.orchestration_plugin
+    convergence_enabled = plugin.convergence_engine_enabled
     skipper = testtools.skipUnless(convergence_enabled,
                                    "Convergence-only tests are disabled")
     return skipper(test_method)
