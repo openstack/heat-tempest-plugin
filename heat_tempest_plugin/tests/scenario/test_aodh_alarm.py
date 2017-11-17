@@ -11,7 +11,6 @@
 #    under the License.
 
 import datetime
-from heat.common import timeutils
 from oslo_log import log as logging
 
 from heat_tempest_plugin.common import test
@@ -48,8 +47,9 @@ class AodhAlarmTest(scenario_base.ScenarioTestsBase):
         parameters = {'metric_id': metric['id']}
         stack_identifier = self.stack_create(template=self.template,
                                              parameters=parameters)
-        measures = [{'timestamp': timeutils.isotime(datetime.datetime.now()),
-                     'value': 100}, {'timestamp': timeutils.isotime(
+
+        measures = [{'timestamp': test.isotime(datetime.datetime.now()),
+                     'value': 100}, {'timestamp': test.isotime(
                          datetime.datetime.now() + datetime.timedelta(
                              minutes=1)), 'value': 100}]
         # send measures(should cause the alarm to fire)

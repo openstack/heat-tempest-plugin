@@ -60,6 +60,12 @@ def call_until_true(duration, sleep_for, func, *args, **kwargs):
     return False
 
 
+def isotime(at):
+    if at is None:
+        return None
+    return at.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
 def rand_name(name=''):
     randbits = six.text_type(random.randint(1, 0x7fffffff))
     if name:
