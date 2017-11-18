@@ -29,7 +29,7 @@ def load_tests(loader, tests, pattern):
     """Provide a TestSuite to the discovery process."""
     test_dir = os.path.join(os.path.dirname(__file__), TESTS_DIR)
 
-    conf = config.CONF.orchestration_plugin
+    conf = config.CONF.heat_plugin
     if conf.auth_url is None:
         # It's not configured, let's not load tests
         return

@@ -23,6 +23,6 @@ To run the tests against DevStack, do the following:
 
     tempest run --regex heat_tempest_plugin.tests
 
-If custom configuration is required, edit the [orchestration_plugin] section of
+If custom configuration is required, edit the [heat_plugin] section of
 
     $DEST/tempest/etc/tempest.conf

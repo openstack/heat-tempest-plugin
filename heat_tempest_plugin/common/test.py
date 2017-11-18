@@ -79,7 +79,7 @@ def requires_convergence(test_method):
 
     The decorated test will be skipped when convergence is disabled.
     '''
-    plugin = config.CONF.orchestration_plugin
+    plugin = config.CONF.heat_plugin
     convergence_enabled = plugin.convergence_engine_enabled
     skipper = testtools.skipUnless(convergence_enabled,
                                    "Convergence-only tests are disabled")
@@ -92,7 +92,7 @@ class HeatIntegrationTest(testscenarios.WithScenarios,
     def setUp(self):
         super(HeatIntegrationTest, self).setUp()
 
-        self.conf = config.CONF.orchestration_plugin
+        self.conf = config.CONF.heat_plugin
 
         self.assertIsNotNone(self.conf.auth_url,
                              'No auth_url configured')

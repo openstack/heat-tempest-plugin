@@ -18,12 +18,12 @@ service_available_group = cfg.OptGroup(name="service_available",
                                        title="Available OpenStack Services")
 
 ServiceAvailableGroup = [
-    cfg.BoolOpt("orchestration_plugin",
+    cfg.BoolOpt("heat_plugin",
                 default=True,
                 help="Whether or not heat is expected to be available"),
 ]
 
-heat_group = cfg.OptGroup(name="orchestration_plugin",
+heat_group = cfg.OptGroup(name="heat_plugin",
                           title="Heat Service Options")
 
 HeatGroup = [
@@ -43,12 +43,12 @@ HeatGroup = [
     cfg.StrOpt('project_name',
                help="Project name to use for API requests.",
                deprecated_opts=[cfg.DeprecatedOpt(
-                   'tenant_name', group='orchestration_plugin')]),
+                   'tenant_name', group='heat_plugin')]),
     cfg.StrOpt('admin_project_name',
                default='admin',
                help="Admin project name to use for admin API requests.",
                deprecated_opts=[cfg.DeprecatedOpt(
-                   'admin_tenant_name', group='orchestration_plugin')]),
+                   'admin_tenant_name', group='heat_plugin')]),
     cfg.StrOpt('auth_url',
                help="Full URI of the OpenStack Identity API (Keystone)."),
     cfg.StrOpt('auth_version',
