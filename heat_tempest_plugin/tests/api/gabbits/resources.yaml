@@ -4,6 +4,7 @@ defaults:
 
 tests:
 - name: create stack with resources
+  desc: 947be7b2-503d-41f5-9843-61be50954f13
   POST: /stacks
   request_headers:
     content-type: application/json
@@ -29,6 +30,7 @@ tests:
     location: //stacks/$ENVIRON['PREFIX']-rsrcstack/[a-f0-9-]+/
 
 - name: poll for rsrcstack CREATE_COMPLETE
+  desc: e9eac22f-c3e7-450f-a087-08a8655a6e8e
   GET: $LOCATION
   redirects: True
   poll:
@@ -38,6 +40,7 @@ tests:
     $.stack.stack_status: CREATE_COMPLETE
 
 - name: list resources
+  desc: ec53f10d-a89a-4243-8706-629a01ea890f
   GET: $LAST_URL/resources
   request_headers:
     content-type: application/json
@@ -47,6 +50,7 @@ tests:
     $.resources[0].resource_status: CREATE_COMPLETE
 
 - name: list filtered resources
+  desc: da07d3d2-9ccc-4fa1-9b1b-9cb3074fe9b9
   GET: $LAST_URL
   request_headers:
     content-type: application/json
@@ -57,6 +61,7 @@ tests:
     $.resources: []
 
 - name: show resource
+  desc: 2cbcedc5-0aa7-454e-bf89-a3dd5d379dc1
   GET: $LAST_URL/test
   request_headers:
     content-type: application/json
@@ -65,6 +70,7 @@ tests:
     $.resource.attributes.output: test
 
 - name: mark resource unhealthy
+  desc: 6031516b-3a8f-4d1b-8990-81a571b5f956
   PATCH: $LAST_URL
   request_headers:
     content-type: application/json
@@ -74,6 +80,7 @@ tests:
   status: 200
 
 - name: show unhealthy resource
+  desc: 9e784490-2e88-49af-8ee7-c4c6aba2be64
   GET: $LAST_URL
   status: 200
   response_json_paths:
@@ -81,10 +88,12 @@ tests:
     $.resource.resource_status_reason: 'resource deleted'
 
 - name: signal resource
+  desc: c65a047c-8c7b-4b44-9f5f-bf1069751c5c
   POST: $LAST_URL/signal
   status: 400
 
 - name: delete stack with resources
+  desc: 0edc4fdc-811d-4d27-a0dd-6ec4db2bda6e
   DELETE: /stacks/$ENVIRON['PREFIX']-rsrcstack
   redirects: True
   status: 204

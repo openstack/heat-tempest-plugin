@@ -4,12 +4,14 @@ defaults:
 
 tests:
 - name: list template versions
+  desc: cbc28c20-e740-43ef-a01b-b1a39f4a0db3
   GET: /template_versions
   status: 200
   response_json_paths:
     $.template_versions[?(@.version='heat_template_version.2017-02-24')].type: hot
 
 - name: list template functions
+  desc: 721ff23c-8527-480f-a090-1c915b4f8430
   GET: /template_versions/heat_template_version.2016-10-14/functions
   status: 200
   response_json_paths:
@@ -17,6 +19,7 @@ tests:
       A function for including a file inline.
 
 - name: template validate
+  desc: f307139b-03d0-4006-92b7-81c86c949727
   POST: /validate
   request_headers:
     content-type: application/json

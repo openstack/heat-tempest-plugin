@@ -4,12 +4,14 @@ defaults:
 
 tests:
 - name: stack list
+  desc: 39c0245e-6055-41cf-9f0e-15adfe55ded6
   GET: /stacks
   status: 200
   response_headers:
     content-type: application/json
 
 - name: create empty stack
+  desc: bde1b827-65fb-47ea-909f-82537e6260d3
   POST: /stacks
   request_headers:
     content-type: application/json
@@ -28,6 +30,7 @@ tests:
 
 
 - name: poll for empty CREATE_COMPLETE
+  desc: f575e5c4-2aed-4381-9f0d-2dfcb0640c4b
   GET: $LOCATION
   redirects: True
   poll:
@@ -37,16 +40,19 @@ tests:
     $.stack.stack_status: CREATE_COMPLETE
 
 - name: show empty stack
+  desc: 89b233fe-0d55-4959-9289-0b5dabe4e4c9
   GET: $LAST_URL
   redirects: True
   status: 200
 
 - name: delete empty stack
+  desc: 7eca55fe-8300-43b6-a6b8-fb2d99b51911
   DELETE: $LAST_URL
   redirects: True
   status: 204
 
 - name: create stack
+  desc: 56ac2173-97c5-4347-bd32-529a260cfac3
   POST: /stacks
   request_headers:
     content-type: application/json
@@ -74,6 +80,7 @@ tests:
     location: //stacks/$ENVIRON['PREFIX']-stack/[a-f0-9-]+/
 
 - name: poll for stack CREATE_COMPLETE
+  desc: 6a0fe2dc-2822-4af3-b606-321ff7ad3de9
   GET: $LOCATION
   redirects: True
   poll:
@@ -83,11 +90,13 @@ tests:
     $.stack.stack_status: CREATE_COMPLETE
 
 - name: show stack
+  desc: 9b268607-0335-4667-a613-bccf81e66f8f
   GET: $LAST_URL
   redirects: True
   status: 200
 
 - name: update stack
+  desc: 6bb1ec02-dd19-4b2c-9a6d-866ce666650f
   PUT: $LAST_URL
   request_headers:
     content-type: application/json
@@ -115,6 +124,7 @@ tests:
   status: 202
 
 - name: poll for stack UPDATE_COMPLETE
+  desc: 3e280fb3-02b6-44fb-84dd-e04921d47733
   GET: $LAST_URL
   redirects: True
   poll:
@@ -124,6 +134,7 @@ tests:
     $.stack.stack_status: UPDATE_COMPLETE
 
 - name: patch update stack
+  desc: 927cea42-a35b-4664-b209-ab2cb34e6ef4
   PATCH: $LAST_URL
   request_headers:
     content-type: application/json
@@ -133,6 +144,7 @@ tests:
   status: 202
 
 - name: poll for stack patch UPDATE_COMPLETE
+  desc: a1cfd3b4-2536-4c54-94f4-12093f2ccf3b
   GET: $LAST_URL
   redirects: True
   poll:
@@ -143,6 +155,7 @@ tests:
     $.stack.updated_time: /^(?!$HISTORY['poll for stack UPDATE_COMPLETE'].$RESPONSE['$.stack.updated_time'])/
 
 - name: list stack outputs
+  desc: bbd98b50-b75b-44a1-b7e8-0a68fd7c6d33
   GET: $LAST_URL/outputs
   redirects: True
   status: 200
@@ -150,6 +163,7 @@ tests:
     $.outputs[0].output_key: output_value
 
 - name: get stack output
+  desc: e761f5d7-70f6-4d95-a11b-e5fa0ecb43d2
   GET: $LAST_URL/output_value
   redirects: True
   status: 200
@@ -157,6 +171,7 @@ tests:
     $.output.output_value: new_patched_value
 
 - name: delete stack
+  desc: bcf4c359-0a64-4652-b465-df3f688a9d4d
   DELETE: /stacks/$ENVIRON['PREFIX']-stack
   redirects: True
   status: 204

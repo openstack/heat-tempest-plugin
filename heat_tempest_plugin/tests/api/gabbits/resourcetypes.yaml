@@ -4,10 +4,12 @@ defaults:
 
 tests:
 - name: list resource types
+  desc: 5b4db88b-d171-4400-b7a7-a7dc8f597d31
   GET: /resource_types
   status: 200
 
 - name: show resource type
+  desc: cc05d1ef-17f1-430e-bea1-0f6766f7d0b4
   GET: /resource_types/OS::Heat::TestResource
   status: 200
   response_json_paths:
@@ -15,6 +17,7 @@ tests:
     $.properties.wait_secs.default: 0
 
 - name: resource type template
+  desc: 5a2164eb-645a-4245-acd7-b222a715fc09
   GET: /resource_types/OS::Heat::TestResource/template
   query_parameters:
     template_type: hot

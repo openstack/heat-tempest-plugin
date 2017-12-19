@@ -4,6 +4,7 @@ defaults:
 
 tests:
 - name: environment with parameter
+  desc: 8281d088-0c80-4071-a13d-333b309be6ca
   POST: /stacks
   request_headers:
     content-type: application/json
@@ -34,6 +35,7 @@ tests:
     location: //stacks/$ENVIRON['PREFIX']-envstack/[a-f0-9-]+/
 
 - name: poll for envstack CREATE_COMPLETE
+  desc: 29899c70-9c94-4e24-8988-df76f7eaaa70
   GET: $LOCATION
   redirects: True
   poll:
@@ -43,6 +45,7 @@ tests:
     $.stack.stack_status: CREATE_COMPLETE
 
 - name: get stack output
+  desc: f60dd8df-82d1-4228-8926-54d65ebd12e1
   GET: $LAST_URL/outputs/output_value
   redirects: True
   status: 200
@@ -50,6 +53,7 @@ tests:
     $.output.output_value: test
 
 - name: delete envstack
+  desc: 0efde180-cc0e-4f2c-bb18-fa345e8d21ad
   DELETE: /stacks/$ENVIRON['PREFIX']-envstack
   redirects: True
   status: 204

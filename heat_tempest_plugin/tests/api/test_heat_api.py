@@ -14,13 +14,14 @@
 """A test module to exercise the Heat API with gabbi.  """
 
 import os
+import unittest
 
 from gabbi import driver
 from six.moves.urllib import parse as urlparse
+from tempest import config
 
 from heat_tempest_plugin.common import test
 from heat_tempest_plugin.services import clients
-from tempest import config
 
 TESTS_DIR = 'gabbits'
 
@@ -40,5 +41,26 @@ def load_tests(loader, tests, pattern):
     os.environ['OS_TOKEN'] = manager.identity_client.auth_token
     os.environ['PREFIX'] = test.rand_name('api')
 
-    return driver.build_tests(test_dir, loader, host=host,
-                              url=endpoint, test_loader_name=__name__)
+    def register_test_case_id(test_case):
+        tempest_id = test_case.test_data.get('desc')
+        test_name = test_case.id()
+        if not tempest_id:
+            raise AssertionError(
+                "No Tempest ID registered for API test %s" % test_name)
+
+        def test_id():
+            return test_name + '[id-%s]' % tempest_id
+
+        test_case.id = test_id
+
+    def register_test_suite_ids(test_suite):
+        for test_case in test_suite:
+            if isinstance(test_case, unittest.TestSuite):
+                register_test_suite_ids(test_case)
+            else:
+                register_test_case_id(test_case)
+
+    api_tests = driver.build_tests(test_dir, loader, host=host,
+                                   url=endpoint, test_loader_name=__name__)
+    register_test_suite_ids(api_tests)
+    return api_tests
