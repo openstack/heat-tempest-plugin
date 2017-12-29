@@ -20,6 +20,7 @@ import time
 import yaml
 
 from oslo_utils import timeutils
+from tempest.lib import decorators
 
 from heat_tempest_plugin.common import exceptions
 from heat_tempest_plugin.common import test
@@ -69,6 +70,7 @@ properties:
 
     enable_cleanup = True
 
+    @decorators.idempotent_id('8ee231ff-f80a-4a17-a860-5cda87e18ad0')
     def test_deployments_metadata(self):
         parms = {'flavor': self.conf.minimal_instance_type,
                  'network': self.conf.fixed_network_name,
@@ -102,6 +104,7 @@ properties:
         for config_stack in config_stacks:
             self._wait_for_stack_status(config_stack, 'CREATE_COMPLETE')
 
+    @decorators.idempotent_id('bd539232-b999-4bec-b47d-ff4822fc8b82')
     def test_deployments_timeout_failed(self):
         parms = {'flavor': self.conf.minimal_instance_type,
                  'network': self.conf.fixed_network_name,
@@ -226,6 +229,7 @@ auth_url = %(auth_url)s
 queue_id = %(queue_id)s
     '''
 
+    @decorators.idempotent_id('3af97ced-bead-4629-b78a-97762719e990')
     def test_signal_queues(self):
         parms = {'flavor': self.conf.minimal_instance_type,
                  'network': self.conf.fixed_network_name,

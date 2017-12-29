@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -31,6 +33,7 @@ resources:
       value: {get_param: input}
 '''
 
+    @decorators.idempotent_id('67332e51-b427-42d5-ad8d-fd2ec334f361')
     def test_stack_tag(self):
         # Stack create with stack tags
         tags = 'foo,bar'
@@ -66,6 +69,7 @@ resources:
         empty_tags_stack = self.client.stacks.get(stack_identifier)
         self.assertIsNone(empty_tags_stack.tags)
 
+    @decorators.idempotent_id('5ed79584-0684-4f9c-ae8e-44a8f874ec79')
     def test_hidden_stack(self):
         # Stack create with hidden stack tag
         tags = 'foo,hidden'

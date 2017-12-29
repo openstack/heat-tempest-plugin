@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -173,6 +175,7 @@ class CreateServerTest(functional_base.FunctionalTestsBase):
         stack = self.client.stacks.get(stack_identifier)
         return self._stack_output(stack, output_key)
 
+    @decorators.idempotent_id('58ccf0aa-7531-4eaa-8ed5-38663a4defaa')
     def test_create_server_with_subnet_fixed_ip_sec_group(self):
         parms = {'flavor': self.conf.minimal_instance_type,
                  'image': self.conf.minimal_image_ref}
@@ -190,6 +193,7 @@ class CreateServerTest(functional_base.FunctionalTestsBase):
         server = self.compute_client.servers.get(server_id)
         self.assertEqual([{"name": "the_sg"}], server.security_groups)
 
+    @decorators.idempotent_id('12185eaa-927f-43f3-a525-0424c4eb9b5d')
     def test_create_update_server_with_subnet(self):
         parms = {'flavor': self.conf.minimal_instance_type,
                  'image': self.conf.minimal_image_ref}
@@ -213,6 +217,7 @@ class CreateServerTest(functional_base.FunctionalTestsBase):
         self.assertNotIn('11.11.11', new_networks['the_net'][0])
         self.assertIn('12.12.12', new_networks['the_net'][0])
 
+    @decorators.idempotent_id('19479c15-6b25-4865-8889-658566608bd9')
     def test_create_server_with_port(self):
         parms = {'flavor': self.conf.minimal_instance_type,
                  'image': self.conf.minimal_image_ref}
@@ -234,6 +239,7 @@ class UpdateServerNetworksTest(functional_base.FunctionalTestsBase):
         stack = self.client.stacks.get(stack_identifier)
         return self._stack_output(stack, output_key)
 
+    @decorators.idempotent_id('c1a22dbf-3160-41b7-8d3f-62ca33fc35a8')
     def test_create_update_server_swap_network_subnet(self):
         '''Test updating stack with:
 
@@ -257,6 +263,7 @@ class UpdateServerNetworksTest(functional_base.FunctionalTestsBase):
                           parameters=self.params)
         self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
 
+    @decorators.idempotent_id('cccfe612-1ab7-401f-a4c5-63372826a780')
     def test_create_update_server_swap_network_port(self):
         '''Test updating stack with:
 
@@ -280,6 +287,7 @@ class UpdateServerNetworksTest(functional_base.FunctionalTestsBase):
                           parameters=self.params)
         self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
 
+    @decorators.idempotent_id('3eeb0dff-5d2d-4178-a4e6-06e4c26ce23a')
     def test_create_update_server_swap_subnet_network(self):
         '''Test updating stack with:
 
@@ -303,6 +311,7 @@ class UpdateServerNetworksTest(functional_base.FunctionalTestsBase):
                           parameters=self.params)
         self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
 
+    @decorators.idempotent_id('647fda5d-fc0c-4eb1-9ce3-c4c537461324')
     def test_create_update_server_add_subnet(self):
         '''Test updating stack with:
 
@@ -328,6 +337,7 @@ class UpdateServerNetworksTest(functional_base.FunctionalTestsBase):
                           parameters=self.params)
         self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
 
+    @decorators.idempotent_id('01c0f1cd-25b2-49b9-b4ac-fc4dd8937e42')
     def test_create_update_server_add_same_fixed_ip(self):
         '''Test updating stack with:
 
@@ -355,6 +365,7 @@ class UpdateServerNetworksTest(functional_base.FunctionalTestsBase):
                           parameters=self.params)
         self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
 
+    @decorators.idempotent_id('abc39cd6-7745-4314-ac04-85df532dd7c9')
     def test_create_update_server_add_network(self):
         '''Test updating stack with:
 
@@ -380,6 +391,7 @@ class UpdateServerNetworksTest(functional_base.FunctionalTestsBase):
                           parameters=self.params)
         self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
 
+    @decorators.idempotent_id('3f729e7e-a698-4ee3-8a5e-0db84f16d1e1')
     def test_create_update_server_multi_networks_swaps(self):
         '''Test updating stack with:
 

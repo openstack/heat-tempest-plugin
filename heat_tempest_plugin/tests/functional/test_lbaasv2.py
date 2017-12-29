@@ -11,6 +11,8 @@
 #    under the License.
 
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -88,6 +90,7 @@ outputs:
         if not self.is_network_extension_supported('lbaasv2'):
             self.skipTest('LBaasv2 extension not available, skipping')
 
+    @decorators.idempotent_id('2f4a476c-cba7-448b-a7c1-85f7284f0293')
     def test_create_update_loadbalancer(self):
         parameters = {
             'subnet': self.conf.fixed_subnet_name,
@@ -125,6 +128,7 @@ outputs:
         self.assertEqual(7777, output['connection_limit'])
         self.assertEqual('updatedListener', output['description'])
 
+    @decorators.idempotent_id('104f59ae-a3c8-4c12-98e5-a7bc0007878d')
     def test_add_delete_poolmember(self):
         parameters = {
             'subnet': self.conf.fixed_subnet_name,

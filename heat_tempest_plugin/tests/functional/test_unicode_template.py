@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -61,6 +63,7 @@ outputs:
         self.assertEqual('OS::Heat::RandomString',
                          result['resource_type'])
 
+    @decorators.idempotent_id('871cc5dd-7550-494d-8c6d-9d549a8c0305')
     def test_template_validate_basic(self):
         ret = self.client.stacks.validate(template=self.random_template)
         expected = {
@@ -82,6 +85,7 @@ outputs:
         }
         self.assertEqual(expected, ret)
 
+    @decorators.idempotent_id('e84c76b8-a5e5-45e7-9c4b-4c160d1c385f')
     def test_template_validate_override_default(self):
         env = {'parameters': {u'\u53c2\u6570': 5}}
         ret = self.client.stacks.validate(template=self.random_template,
@@ -106,6 +110,7 @@ outputs:
         }
         self.assertEqual(expected, ret)
 
+    @decorators.idempotent_id('66338945-a3ae-4e3a-aa17-ab802ceb00b1')
     def test_stack_preview(self):
         result = self.client.stacks.preview(
             template=self.random_template,
@@ -113,6 +118,7 @@ outputs:
             disable_rollback=True).to_dict()
         self._assert_preview_results(result)
 
+    @decorators.idempotent_id('d2c4a10c-3cb4-4efd-889d-695a0acbd04f')
     def test_create_stack(self):
         stack_identifier = self.stack_create(template=self.random_template)
         stack = self.client.stacks.get(stack_identifier)

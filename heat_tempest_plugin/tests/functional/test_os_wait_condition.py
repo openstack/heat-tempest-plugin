@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -99,6 +101,7 @@ outputs:
         if not self.conf.minimal_instance_type:
             raise self.skipException("No minimal flavor configured to test")
 
+    @decorators.idempotent_id('cc54ca6e-b91d-4ddd-80cc-24a886dfaaa0')
     def test_create_stack_with_multi_signal_waitcondition(self):
         params = {'flavor': self.conf.minimal_instance_type,
                   'image': self.conf.minimal_image_ref,

@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -62,6 +64,7 @@ class UpdatePortTest(functional_base.FunctionalTestsBase):
         port_mac = self._stack_output(stack, 'mac_address')
         return port_id[0], port_ip, port_mac
 
+    @decorators.idempotent_id('8e37933b-345c-4ce5-a523-e67bdf198d73')
     def test_update_remove_ip(self):
         # create with defined ip_address
         stack_identifier = self.stack_create(template=test_template)
@@ -77,6 +80,7 @@ class UpdatePortTest(functional_base.FunctionalTestsBase):
         self.assertEqual(_id, new_id)
         self.assertEqual(_mac, new_mac)
 
+    @decorators.idempotent_id('df1bf0fb-115e-42f3-b6cc-e12b5d506c98')
     def test_update_with_mac_address(self):
         if not self.conf.admin_username or not self.conf.admin_password:
             self.skipTest('No admin creds found, skipping')

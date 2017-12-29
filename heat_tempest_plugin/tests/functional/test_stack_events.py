@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -42,6 +44,7 @@ outputs:
         self.assertIsNotNone(event.resource_status_reason)
         self.assertIsNotNone(event.id)
 
+    @decorators.idempotent_id('620f4f7c-74f8-48a4-a8b0-d06d0337f133')
     def test_event(self):
         parameters = {}
 

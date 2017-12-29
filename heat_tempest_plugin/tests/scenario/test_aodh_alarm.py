@@ -11,7 +11,9 @@
 #    under the License.
 
 import datetime
+
 from oslo_log import log as logging
+from tempest.lib import decorators
 
 from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.scenario import scenario_base
@@ -35,6 +37,7 @@ class AodhAlarmTest(scenario_base.ScenarioTestsBase):
                                                                  actual))
         return actual == expected
 
+    @decorators.idempotent_id('fc0f18a6-f65c-4df1-b9c5-e160dea59849')
     def test_alarm(self):
         """Confirm we can create an alarm and trigger it."""
         # create metric

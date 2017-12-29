@@ -10,9 +10,11 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from heat_tempest_plugin.tests.functional import functional_base
 from heatclient import exc
 import six
+from tempest.lib import decorators
+
+from heat_tempest_plugin.tests.functional import functional_base
 
 
 class StackPreviewTest(functional_base.FunctionalTestsBase):
@@ -88,6 +90,7 @@ parameters:
         self.assertEqual(stack_name, result['parameters']['OS::stack_name'])
         self.assertEqual('abc', result['parameters']['incomming'])
 
+    @decorators.idempotent_id('4c2c062d-4723-42c0-a113-3307dd4ceb12')
     def test_basic_pass(self):
         stack_name = self._stack_rand_name()
         result = self.client.stacks.preview(
@@ -114,6 +117,7 @@ parameters:
                 self.assertEqual('abc', res['properties']['value'])
                 self.assertEqual([], res['required_by'])
 
+    @decorators.idempotent_id('54e69a54-762d-479e-a4f4-1fbf21af01c6')
     def test_basic_fail(self):
         stack_name = self._stack_rand_name()
 
@@ -131,6 +135,7 @@ parameters:
                       ': The Parameter (missing) was not provided.',
                       six.text_type(excp))
 
+    @decorators.idempotent_id('0449113c-ff90-4f2b-8825-27ea35c1983f')
     def test_nested_pass(self):
         """Nested stacks need to recurse down the stacks."""
         main_template = '''
@@ -187,6 +192,7 @@ outputs:
         self.assertEqual('abc', res['properties']['value'])
         self.assertEqual([], res['required_by'])
 
+    @decorators.idempotent_id('6ca8ddfc-106f-4ecc-83f7-fca31d0c85ca')
     def test_res_group_with_nested_template(self):
         main_template = '''
 heat_template_version: 2015-04-30

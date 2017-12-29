@@ -13,6 +13,7 @@
 
 from heatclient import exc
 import six
+from tempest.lib import decorators
 
 from heat_tempest_plugin.tests.functional import functional_base
 
@@ -49,6 +50,7 @@ outputs:
         self.template = self.template.replace('RegionOne',
                                               self.conf.region)
 
+    @decorators.idempotent_id('7e735c40-24fb-4ef8-8585-d1c68b344476')
     def test_remote_stack_alone(self):
         stack_id = self.stack_create(template=self.remote_template)
         expected_resources = {'random1': 'OS::Heat::RandomString'}
@@ -57,6 +59,7 @@ outputs:
         output_value = self._stack_output(stack, 'remote_key')
         self.assertEqual(32, len(output_value))
 
+    @decorators.idempotent_id('aeed20d1-ebda-4544-9ace-16b0c8fc24f6')
     def test_stack_create(self):
         files = {'remote_stack.yaml': self.remote_template}
         stack_id = self.stack_create(files=files)
@@ -80,6 +83,7 @@ outputs:
         remote_resources = {'random1': 'OS::Heat::RandomString'}
         self.assertEqual(remote_resources, self.list_resources(remote_id))
 
+    @decorators.idempotent_id('830bfeae-6d8a-4cb2-823d-d8b6c3a740ad')
     def test_stack_create_bad_region(self):
         tmpl_bad_region = self.template.replace(self.conf.region, 'DARKHOLE')
         files = {'remote_stack.yaml': self.remote_template}
@@ -94,6 +98,7 @@ outputs:
                      'orchestration service in DARKHOLE region not found"')
         self.assertEqual(error_msg, six.text_type(ex))
 
+    @decorators.idempotent_id('b2190dfc-d223-4595-b168-6c42b0f3a3e5')
     def test_stack_resource_validation_fail(self):
         tmpl_bad_format = self.remote_template.replace('resources', 'resource')
         files = {'remote_stack.yaml': tmpl_bad_format}
@@ -106,6 +111,7 @@ outputs:
                      'invalid: resource"') % self.conf.region
         self.assertEqual(error_msg, six.text_type(ex))
 
+    @decorators.idempotent_id('141f0478-121b-4e61-bde7-d5551bfd1fc2')
     def test_stack_update(self):
         files = {'remote_stack.yaml': self.remote_template}
         stack_id = self.stack_create(files=files)
@@ -137,6 +143,7 @@ outputs:
         self.assertEqual(remote_resources,
                          self.list_resources(rstack.id))
 
+    @decorators.idempotent_id('50841af8-bdf5-4df6-a075-dc061ada6833')
     def test_stack_suspend_resume(self):
         files = {'remote_stack.yaml': self.remote_template}
         stack_id = self.stack_create(files=files)

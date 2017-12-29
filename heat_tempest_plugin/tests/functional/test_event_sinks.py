@@ -12,6 +12,7 @@
 
 import uuid
 
+from tempest.lib import decorators
 from zaqarclient.queues.v2 import client as zaqarclient
 
 from heat_tempest_plugin.common import test
@@ -28,6 +29,7 @@ resources:
       value: ok
 '''
 
+    @decorators.idempotent_id('d0b72695-e97d-4aa1-bfaf-31c14b09ac87')
     def test_events(self):
         queue_id = str(uuid.uuid4())
         environment = {'event_sinks': [{'type': 'zaqar-queue',

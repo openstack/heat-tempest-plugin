@@ -1,0 +1,7 @@
+---
+other:
+  - |
+    We can now run check-uuid to check if we give tempest id for all tempest
+    tests (not includes tests which run with gabbits) by running
+    ``tox -e pep8``. Also now you can run ``tox -e uuidgen`` for automatically
+    add ids to tests.

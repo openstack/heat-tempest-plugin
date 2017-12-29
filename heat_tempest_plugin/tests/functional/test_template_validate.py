@@ -14,6 +14,7 @@
 import six
 
 from heatclient import exc
+from tempest.lib import decorators
 
 from heat_tempest_plugin.tests.functional import functional_base
 
@@ -86,6 +87,7 @@ resources:
       length: {get_param: aparam}
 '''
 
+    @decorators.idempotent_id('b65a80c2-a507-4deb-9e7e-43181cc05211')
     def test_template_validate_basic(self):
         ret = self.client.stacks.validate(template=self.random_template)
         expected = {'Description': 'the stack description',
@@ -102,6 +104,7 @@ resources:
                         'resource_registry': {u'resources': {}}}}
         self.assertEqual(expected, ret)
 
+    @decorators.idempotent_id('bf27371d-e202-4bae-9f13-2ef137958517')
     def test_template_validate_override_default(self):
         env = {'parameters': {'aparam': 5}}
         ret = self.client.stacks.validate(template=self.random_template,
@@ -121,6 +124,7 @@ resources:
                         'resource_registry': {u'resources': {}}}}
         self.assertEqual(expected, ret)
 
+    @decorators.idempotent_id('0278e03d-ed50-4909-b29d-9c4267d3fcd6')
     def test_template_validate_override_none(self):
         env = {'resource_registry': {
                'OS::Heat::RandomString': 'OS::Heat::None'}}
@@ -142,6 +146,7 @@ resources:
                             u'resources': {}}}}
         self.assertEqual(expected, ret)
 
+    @decorators.idempotent_id('acb1435b-f1db-4427-9121-7e3144ddb81e')
     def test_template_validate_basic_required_param(self):
         tmpl = self.random_template.replace('default: 10', '')
         ret = self.client.stacks.validate(template=tmpl)
@@ -158,6 +163,7 @@ resources:
                         'resource_registry': {u'resources': {}}}}
         self.assertEqual(expected, ret)
 
+    @decorators.idempotent_id('7aac1feb-8256-4f70-8459-5e9780d28904')
     def test_template_validate_fail_version(self):
         fail_template = self.random_template.replace('2014-10-16', 'invalid')
         ex = self.assertRaises(exc.HTTPBadRequest,
@@ -165,6 +171,7 @@ resources:
                                template=fail_template)
         self.assertIn('The template version is invalid', six.text_type(ex))
 
+    @decorators.idempotent_id('6a6472d2-71fa-4ebe-a2b6-20878838555b')
     def test_template_validate_parameter_groups(self):
         ret = self.client.stacks.validate(template=self.random_template_groups)
         expected = {'Description': 'the stack description',
@@ -198,6 +205,7 @@ resources:
                         'resource_registry': {u'resources': {}}}}
         self.assertEqual(expected, ret)
 
+    @decorators.idempotent_id('5100cf18-f52a-47a2-880c-d540edad149f')
     def test_template_validate_nested_off(self):
         files = {'mynested.yaml': self.random_template}
         ret = self.client.stacks.validate(template=self.parent_template,
@@ -218,6 +226,7 @@ resources:
                             u'resources': {}}}}
         self.assertEqual(expected, ret)
 
+    @decorators.idempotent_id('480bcf64-25ae-49c7-b147-7cbc27d09cea')
     def test_template_validate_nested_on(self):
         files = {'mynested.yaml': self.random_template}
         ret = self.client.stacks.validate(template=self.parent_template_noprop,
@@ -244,6 +253,7 @@ resources:
                             u'resources': {}}}}
         self.assertEqual(expected, ret)
 
+    @decorators.idempotent_id('a0bb07f0-2e10-4226-a205-a7eb04df415f')
     def test_template_validate_nested_on_multiple(self):
         # parent_template -> nested_template -> random_template
         nested_template = self.random_template.replace(

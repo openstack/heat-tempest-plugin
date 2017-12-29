@@ -13,6 +13,8 @@
 
 import json
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.common import exceptions
 from heat_tempest_plugin.tests.scenario import scenario_base
 
@@ -75,10 +77,12 @@ class ServerSignalIntegrationTest(scenario_base.ScenarioTestsBase):
             self.fail(
                 "Timed out waiting for %s to become reachable" % server_ip)
 
+    @decorators.idempotent_id('8da0f6cc-60e6-4298-9e54-e1f905c5552a')
     def test_server_signal_userdata_format_raw(self):
         self._test_server_signal(image=self.conf.minimal_image_ref,
                                  flavor=self.conf.minimal_instance_type)
 
+    @decorators.idempotent_id('3d753d42-7c16-4a0e-8f73-875881826626')
     def test_server_signal_userdata_format_software_config(self):
         if not self.conf.image_ref:
             raise self.skipException("No image configured to test")

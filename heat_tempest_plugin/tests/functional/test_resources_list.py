@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -35,6 +37,7 @@ test_template_depend = {
 
 class ResourcesList(functional_base.FunctionalTestsBase):
 
+    @decorators.idempotent_id('b65b5c82-68b0-42c9-82a0-c0e74e9ad906')
     def test_filtering_with_depend(self):
         stack_identifier = self.stack_create(template=test_template_depend)
         [test2] = self.client.resources.list(stack_identifier,
@@ -42,6 +45,7 @@ class ResourcesList(functional_base.FunctionalTestsBase):
 
         self.assertEqual('CREATE_COMPLETE', test2.resource_status)
 
+    @decorators.idempotent_id('97a65d53-b449-4a43-8283-42d43b165756')
     def test_required_by(self):
         stack_identifier = self.stack_create(template=test_template_depend)
         [test1] = self.client.resources.list(stack_identifier,

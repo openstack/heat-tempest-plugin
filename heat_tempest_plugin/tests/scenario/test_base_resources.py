@@ -10,9 +10,11 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from heatclient.common import template_utils
+from tempest.lib import decorators
+
 from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.scenario import scenario_base
-from heatclient.common import template_utils
 
 
 class BasicResourcesTest(scenario_base.ScenarioTestsBase):
@@ -38,6 +40,7 @@ class BasicResourcesTest(scenario_base.ScenarioTestsBase):
         server_networks = self._stack_output(stack, 'server_networks')
         self.assertIn(self.private_net_name, server_networks)
 
+    @decorators.idempotent_id('bd151ea4-2dcd-4440-9bf0-eff63a98e5d4')
     def test_base_resources_integration(self):
         """Define test for base resources interation from core porjects
 

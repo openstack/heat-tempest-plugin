@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -43,6 +45,7 @@ outputs:
     value: { get_param: foo }
 '''
 
+    @decorators.idempotent_id('d5bbf763-8eb9-4657-ad3f-e97405b6e1f2')
     def test_db_encryption(self):
         # Create a stack with the value of 'foo' to be encrypted
         foo_param = 'my_encrypted_foo'

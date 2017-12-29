@@ -14,6 +14,7 @@
 import time
 
 import requests
+from tempest.lib import decorators
 
 from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.scenario import scenario_base
@@ -50,6 +51,7 @@ class AutoscalingLoadBalancerv2Test(scenario_base.ScenarioTestsBase):
                     break
         self.assertEqual(expected_num, len(resp))
 
+    @decorators.idempotent_id('89459930-aa61-4557-989b-3429d3b3b612')
     def test_autoscaling_loadbalancer_neutron(self):
         """Check work of AutoScaing and Neutron LBaaS v2 resource in Heat.
 

@@ -10,6 +10,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
 
 from heat_tempest_plugin.tests.functional import functional_base
 
@@ -73,6 +74,7 @@ class EncryptionVolTypeTest(functional_base.FunctionalTestsBase):
         self.assertEqual(my_encrypted_vol_type_tmpl_prop['control_location'],
                          phy_rsrc_specs.control_location)
 
+    @decorators.idempotent_id('a98de4ce-aa59-478b-a8ce-b5d818c76a68')
     def test_create_update(self):
         stack_identifier = self.stack_create(
             template=test_encryption_vol_type)

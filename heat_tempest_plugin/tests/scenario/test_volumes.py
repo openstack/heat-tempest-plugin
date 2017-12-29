@@ -14,6 +14,7 @@
 from cinderclient import exceptions as cinder_exceptions
 from oslo_log import log as logging
 import six
+from tempest.lib import decorators
 
 from heat_tempest_plugin.common import exceptions
 from heat_tempest_plugin.tests.scenario import scenario_base
@@ -98,6 +99,7 @@ class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
                           self.volume_client.volumes.get,
                           volume_id2)
 
+    @decorators.idempotent_id('c3416735-87bf-4478-85c5-b3823819eb19')
     def test_cinder_volume_create_backup_restore(self):
         """Ensure the 'Snapshot' deletion policy works.
 

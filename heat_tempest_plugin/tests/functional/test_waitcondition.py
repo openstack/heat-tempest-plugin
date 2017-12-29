@@ -13,6 +13,7 @@
 import json
 
 from keystoneclient.v3 import client as keystoneclient
+from tempest.lib import decorators
 from zaqarclient.queues.v2 import client as zaqarclient
 
 from heat_tempest_plugin.tests.functional import functional_base
@@ -38,6 +39,7 @@ outputs:
    value: {'Fn::Select': ['data_id', {get_attr: [wait_condition, data]}]}
 '''
 
+    @decorators.idempotent_id('90183f0d-9929-43a6-8fb6-b81003824c6d')
     def test_signal_queues(self):
         stack_identifier = self.stack_create(
             template=self.template,

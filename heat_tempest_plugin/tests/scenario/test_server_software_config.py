@@ -12,6 +12,7 @@
 
 from heatclient.common import template_utils
 import six
+from tempest.lib import decorators
 
 from heat_tempest_plugin.tests.scenario import scenario_base
 
@@ -132,6 +133,7 @@ class SoftwareConfigIntegrationTest(scenario_base.ScenarioTestsBase):
                 dep1_dep.updated_time,
                 dep1_dep.creation_time)
 
+    @decorators.idempotent_id('fb2afe23-d1a8-45fc-bf8d-b18fc8412972')
     def test_server_software_config(self):
         """Check that passed files with scripts are executed on created server.
 

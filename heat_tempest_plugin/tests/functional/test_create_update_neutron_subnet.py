@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -41,6 +43,7 @@ class UpdateSubnetTest(functional_base.FunctionalTestsBase):
         output = self._stack_output(stack, output_key)
         return output
 
+    @decorators.idempotent_id('af43fc6d-58ba-4b5f-bd68-07b29f0a96bc')
     def test_update_allocation_pools(self):
         stack_identifier = self.stack_create(template=test_template)
         alloc_pools = self.get_outputs(stack_identifier, 'alloc_pools')
@@ -57,6 +60,7 @@ class UpdateSubnetTest(functional_base.FunctionalTestsBase):
         self.assertEqual([{'start': '11.11.11.10', 'end': '11.11.11.100'}],
                          new_alloc_pools)
 
+    @decorators.idempotent_id('2f1d3b04-2183-4e50-8aa3-fa0fbff5c861')
     def test_update_allocation_pools_to_empty(self):
         stack_identifier = self.stack_create(template=test_template)
         alloc_pools = self.get_outputs(stack_identifier, 'alloc_pools')
@@ -72,6 +76,7 @@ class UpdateSubnetTest(functional_base.FunctionalTestsBase):
         # new_alloc_pools should be []
         self.assertEqual([], new_alloc_pools)
 
+    @decorators.idempotent_id('6ec51150-6f83-4179-9faa-a3aee91ea150')
     def test_update_to_no_allocation_pools(self):
         stack_identifier = self.stack_create(template=test_template)
         alloc_pools = self.get_outputs(stack_identifier, 'alloc_pools')
@@ -87,6 +92,7 @@ class UpdateSubnetTest(functional_base.FunctionalTestsBase):
         # last_alloc_pools should be []
         self.assertEqual([], last_alloc_pools)
 
+    @decorators.idempotent_id('ffb3eaf8-044b-4229-99f9-5fd983ccc9d9')
     def test_update_gateway_ip(self):
         stack_identifier = self.stack_create(template=test_template)
         gw_ip = self.get_outputs(stack_identifier, 'gateway_ip')
@@ -100,6 +106,7 @@ class UpdateSubnetTest(functional_base.FunctionalTestsBase):
         # the gateway_ip should be the new one
         self.assertEqual('11.11.11.9', new_gw_ip)
 
+    @decorators.idempotent_id('e7b37a6b-e883-4c0c-b6a3-9ece1843e902')
     def test_update_gateway_ip_to_empty(self):
         stack_identifier = self.stack_create(template=test_template)
         gw_ip = self.get_outputs(stack_identifier, 'gateway_ip')
@@ -113,6 +120,7 @@ class UpdateSubnetTest(functional_base.FunctionalTestsBase):
         # new gateway_ip should be None
         self.assertIsNone(new_gw_ip)
 
+    @decorators.idempotent_id('373bab03-1f66-4883-b1de-2ecc39efe17e')
     def test_update_to_no_gateway_ip(self):
         stack_identifier = self.stack_create(template=test_template)
         gw_ip = self.get_outputs(stack_identifier, 'gateway_ip')

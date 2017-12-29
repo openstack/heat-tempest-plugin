@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -35,6 +37,7 @@ outputs:
     value: { get_attr: [test_resource_b, output] }
 '''
 
+    @decorators.idempotent_id('a886dd67-4506-4a37-82ae-43f0a7d83f35')
     def test_outputs(self):
         stack_identifier = self.stack_create(
             template=self.template
@@ -89,6 +92,7 @@ outputs:
     value: {get_attr: [test_resource_b, output]}
 '''
 
+    @decorators.idempotent_id('aea0e495-4c77-4033-8c43-3351e9cb7b48')
     def test_outputs_update_new_resource(self):
         stack_identifier = self.stack_create(template=self.before_template)
         self.update_stack(stack_identifier, template=self.after_template)
@@ -133,6 +137,7 @@ outputs:
     value: { get_param: foo }
 '''
 
+    @decorators.idempotent_id('993a403c-c6e2-475d-a65d-a82b8c9e0c22')
     def test_output_error_nested(self):
         stack_identifier = self.stack_create(
             template=self.nested_template,

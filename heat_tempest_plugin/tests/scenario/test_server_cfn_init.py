@@ -12,6 +12,8 @@
 
 import json
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.common import exceptions
 from heat_tempest_plugin.tests.scenario import scenario_base
 
@@ -92,6 +94,7 @@ class CfnInitIntegrationTest(scenario_base.ScenarioTestsBase):
                 self._log_console_output(servers=[server])
                 raise
 
+    @decorators.idempotent_id('3f7726fc-a41b-40ca-ab38-51e2973f146a')
     def test_server_cfn_init(self):
         """Check cfn-init and cfn-signal availability on the created server.
 

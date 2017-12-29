@@ -10,6 +10,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
 
 from heat_tempest_plugin.tests.functional import functional_base
 
@@ -38,6 +39,7 @@ class TemplateAPITest(functional_base.FunctionalTestsBase):
         }
     }
 
+    @decorators.idempotent_id('ac6ebc41-bd6a-4df4-80e5-f4b9ae3b5506')
     def test_get_stack_template(self):
         stack_identifier = self.stack_create(
             template=self.template
@@ -45,11 +47,13 @@ class TemplateAPITest(functional_base.FunctionalTestsBase):
         template_from_client = self.client.stacks.template(stack_identifier)
         self.assertEqual(self.template, template_from_client)
 
+    @decorators.idempotent_id('9f9a2fc0-f029-4d1f-a2eb-f019b9f75944')
     def test_resource_types(self):
         resource_types = self.client.resource_types.list()
         self.assertTrue(any(resource.resource_type == "OS::Heat::TestResource"
                             for resource in resource_types))
 
+    @decorators.idempotent_id('fafbdcd0-eec3-4e6f-9c88-1e4835d085cf')
     def test_show_resource_template(self):
         resource_details = self.client.resource_types.get(
             resource_type="OS::Heat::TestResource"

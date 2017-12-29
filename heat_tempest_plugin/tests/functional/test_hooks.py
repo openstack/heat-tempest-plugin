@@ -12,6 +12,8 @@
 
 import yaml
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -27,6 +29,7 @@ class HooksTest(functional_base.FunctionalTestsBase):
                              'foo_step3': {'type': 'OS::Heat::RandomString',
                                            'depends_on': 'foo_step2'}}}
 
+    @decorators.idempotent_id('f14cbe86-0392-474a-9f28-bb561745698d')
     def test_hook_pre_create(self):
         env = {'resource_registry':
                {'resources':
@@ -58,6 +61,7 @@ class HooksTest(functional_base.FunctionalTestsBase):
             stack_identifier, 'foo_step2', 'CREATE_COMPLETE')
         self._wait_for_stack_status(stack_identifier, 'CREATE_COMPLETE')
 
+    @decorators.idempotent_id('75009076-96eb-43af-b4df-f002704737d2')
     def test_hook_pre_update_nochange(self):
         env = {'resource_registry':
                {'resources':
@@ -99,6 +103,7 @@ class HooksTest(functional_base.FunctionalTestsBase):
         self.assertEqual(res_before.physical_resource_id,
                          res_after.physical_resource_id)
 
+    @decorators.idempotent_id('9f03d1e0-a2d2-42fc-a9c6-47db05b9c8ed')
     def test_hook_pre_update_replace(self):
         env = {'resource_registry':
                {'resources':
@@ -141,6 +146,7 @@ class HooksTest(functional_base.FunctionalTestsBase):
         self.assertNotEqual(res_before.physical_resource_id,
                             res_after.physical_resource_id)
 
+    @decorators.idempotent_id('15c4f97d-5e06-40c6-83af-0e57d5afaff9')
     def test_hook_pre_update_in_place(self):
         env = {'resource_registry':
                {'resources':
@@ -190,6 +196,7 @@ class HooksTest(functional_base.FunctionalTestsBase):
         self.assertEqual(res_before.physical_resource_id,
                          res_after.physical_resource_id)
 
+    @decorators.idempotent_id('7d96b5f4-4aba-493d-b098-4beea4654a2b')
     def test_hook_pre_create_nested(self):
         files = {'nested.yaml': yaml.safe_dump(self.template)}
         env = {'resource_registry':
@@ -231,6 +238,7 @@ class HooksTest(functional_base.FunctionalTestsBase):
             nested_identifier, 'foo_step2', 'CREATE_COMPLETE')
         self._wait_for_stack_status(stack_identifier, 'CREATE_COMPLETE')
 
+    @decorators.idempotent_id('cffc0783-3add-4f0c-ac66-03c90f6feeb0')
     def test_hook_pre_create_wildcard(self):
         env = {'resource_registry':
                {'resources':

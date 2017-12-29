@@ -15,6 +15,8 @@
 import copy
 import yaml
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -94,6 +96,7 @@ class UpdateTrunkTest(functional_base.FunctionalTestsBase):
         sub_ports_set = {frozenset(d.items()) for d in new_sub_ports}
         return sub_ports_set
 
+    @decorators.idempotent_id('5572b0ac-fdb2-4c68-a49e-024771814471')
     def test_add_first_sub_port(self):
         stack_identifier = self.stack_create(template=test_template)
 
@@ -117,6 +120,7 @@ class UpdateTrunkTest(functional_base.FunctionalTestsBase):
         self.assertEqual(self._sub_ports_dict_to_set(new_sub_port),
                          self._sub_ports_dict_to_set(trunk_sub_port))
 
+    @decorators.idempotent_id('c3f52330-01b7-4649-99fd-43700e6bbda3')
     def test_add_a_second_sub_port(self):
         parsed_template = yaml.safe_load(test_template)
         sub_ports = [{'port': {'get_resource': 'sub_port_one'},
@@ -153,6 +157,7 @@ class UpdateTrunkTest(functional_base.FunctionalTestsBase):
         self.assertEqual(self._sub_ports_dict_to_set(expected_sub_ports),
                          self._sub_ports_dict_to_set(trunk_sub_ports))
 
+    @decorators.idempotent_id('cb59363e-5517-42f9-8b93-9ad700e2ef4c')
     def test_remove_sub_port_from_trunk(self):
         sub_ports = [{'port': {'get_resource': 'sub_port_one'},
                       'segmentation_type': 'vlan',
@@ -189,6 +194,7 @@ class UpdateTrunkTest(functional_base.FunctionalTestsBase):
         self.assertEqual(self._sub_ports_dict_to_set(expected_sub_ports),
                          self._sub_ports_dict_to_set(trunk_sub_ports))
 
+    @decorators.idempotent_id('7f0836c7-1d35-4d11-bcdc-e0e19ca68b68')
     def test_remove_last_sub_port_from_trunk(self):
         sub_ports = [{'port': {'get_resource': 'sub_port_one'},
                       'segmentation_type': 'vlan',
@@ -224,6 +230,7 @@ class UpdateTrunkTest(functional_base.FunctionalTestsBase):
                          'The returned sub ports (%s) in trunk_details is '
                          'not empty!' % trunk_sub_ports)
 
+    @decorators.idempotent_id('e9296d6f-009c-4530-9aaf-84a0f8281bcb')
     def test_update_existing_sub_port_on_trunk(self):
         sub_ports = [{'port': {'get_resource': 'sub_port_one'},
                       'segmentation_type': 'vlan',
@@ -253,6 +260,7 @@ class UpdateTrunkTest(functional_base.FunctionalTestsBase):
         self.assertEqual(self._sub_ports_dict_to_set([updated_sub_port]),
                          self._sub_ports_dict_to_set(trunk_sub_ports))
 
+    @decorators.idempotent_id('912044d8-e0c1-4c6c-ab4e-bc1cadc46c18')
     def test_update_trunk_name_and_description(self):
         new_name = 'pineapple'
         new_description = 'This is a test trunk'

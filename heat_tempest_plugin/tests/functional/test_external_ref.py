@@ -10,6 +10,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from tempest.lib import decorators
+
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -32,6 +34,7 @@ outputs:
     value: {get_resource: test1}
 '''
 
+    @decorators.idempotent_id('45449bad-18ba-4148-82e6-a6bc1e9a9b04')
     def test_create_with_external_ref(self):
         stack_name = self._stack_rand_name()
         stack_identifier = self.stack_create(
@@ -55,6 +58,7 @@ outputs:
               'output_key': 'str',
               'output_value': 'foobar'}], stack.outputs)
 
+    @decorators.idempotent_id('fb16477c-e981-4ef9-a83b-c0acc162343a')
     def test_update_with_external_ref(self):
         stack_name = self._stack_rand_name()
         stack_identifier = self.stack_create(
