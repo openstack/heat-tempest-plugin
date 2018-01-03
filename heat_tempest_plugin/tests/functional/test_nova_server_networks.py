@@ -90,6 +90,42 @@ resources:
         - port: {get_resource: port}
 '''
 
+server_with_multiple_subnets_no_ports_template = '''
+heat_template_version: 2016-04-08
+description: Test template to test nova server network updates.
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+resources:
+  net:
+    type: OS::Neutron::Net
+    properties:
+      name: the_net
+  subnet_a:
+    type: OS::Neutron::Subnet
+    properties:
+      network: {get_resource: net}
+      cidr: 11.11.11.0/24
+      name: subnet_a
+  subnet_b:
+    type: OS::Neutron::Subnet
+    properties:
+      network: {get_resource: net}
+      cidr: 12.12.12.0/24
+      name: subnet_b
+  server:
+    type: OS::Nova::Server
+    properties:
+      image: {get_param: image}
+      flavor: {get_param: flavor}
+      networks: $NETWORKS
+outputs:
+  networks:
+    value: {get_attr: [server, networks]}
+'''
+
 
 class CreateServerTest(functional_base.FunctionalTestsBase):
 
@@ -117,26 +153,25 @@ class CreateServerTest(functional_base.FunctionalTestsBase):
     def test_create_update_server_with_subnet(self):
         parms = {'flavor': self.conf.minimal_instance_type,
                  'image': self.conf.minimal_image_ref}
-        template = server_with_sub_fixed_ip_template.replace(
-            'fixed_ip: 11.11.11.11',
-            'fixed_ip: 11.11.11.22').replace(
-            'name: my_net', 'name: your_net')
+        template = server_with_multiple_subnets_no_ports_template.replace(
+            '$NETWORKS', ('[{subnet: {get_resource: subnet_a}}]'))
         stack_identifier = self.stack_create(
             template=template,
             stack_name='create_server_with_sub_ip',
             parameters=parms)
         networks = self.get_outputs(stack_identifier, 'networks')
-        self.assertEqual(['11.11.11.22'], networks['your_net'])
+        self.assertIn('11.11.11', networks['the_net'][0])
 
-        # update the server only with subnet, we won't pass
+        # update the server using a different subnet, we won't pass
         # both port_id and net_id to attach interface, then update success
-        template_only_subnet = template.replace(
-            'fixed_ip: 11.11.11.22', '')
+        template = server_with_multiple_subnets_no_ports_template.replace(
+            '$NETWORKS', ('[{subnet: {get_resource: subnet_b}}]'))
         self.update_stack(stack_identifier,
-                          template_only_subnet,
+                          template,
                           parameters=parms)
         new_networks = self.get_outputs(stack_identifier, 'networks')
-        self.assertNotEqual(['11.11.11.22'], new_networks['your_net'])
+        self.assertNotIn('11.11.11', new_networks['the_net'][0])
+        self.assertIn('12.12.12', new_networks['the_net'][0])
 
     def test_create_server_with_port(self):
         parms = {'flavor': self.conf.minimal_instance_type,
