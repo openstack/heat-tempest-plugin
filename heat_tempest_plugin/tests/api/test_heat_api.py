@@ -19,8 +19,8 @@ from gabbi import driver
 from six.moves.urllib import parse as urlparse
 
 from heat_tempest_plugin.common import test
-from heat_tempest_plugin import config
 from heat_tempest_plugin.services import clients
+from tempest import config
 
 TESTS_DIR = 'gabbits'
 

@@ -34,7 +34,6 @@ class HeatTempestPlugin(plugins.TempestPlugin):
                                   heat_config.ServiceAvailableGroup)
         config.register_opt_group(conf, heat_config.heat_group,
                                   heat_config.HeatGroup)
-        heat_config.CONF = config.CONF
 
     def get_opt_lists(self):
         return [(heat_config.heat_group.name,

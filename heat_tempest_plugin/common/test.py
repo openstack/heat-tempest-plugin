@@ -29,8 +29,8 @@ import testtools
 
 from heat_tempest_plugin.common import exceptions
 from heat_tempest_plugin.common import remote_client
-from heat_tempest_plugin import config
 from heat_tempest_plugin.services import clients
+from tempest import config
 
 LOG = logging.getLogger(__name__)
 _LOG_FORMAT = "%(levelname)8s [%(name)s] %(message)s"

@@ -12,8 +12,6 @@
 
 from oslo_config import cfg
 
-CONF = None
-
 service_available_group = cfg.OptGroup(name="service_available",
                                        title="Available OpenStack Services")
 
