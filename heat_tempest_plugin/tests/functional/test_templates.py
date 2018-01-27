@@ -18,9 +18,8 @@ class TemplateAPITest(functional_base.FunctionalTestsBase):
     """This will test the following template calls:
 
     1. Get the template content for the specific stack
-    2. List template versions
-    3. List resource types
-    4. Show resource details for OS::Heat::TestResource
+    2. List resource types
+    3. Show resource details for OS::Heat::TestResource
     """
 
     template = {
@@ -45,19 +44,6 @@ class TemplateAPITest(functional_base.FunctionalTestsBase):
         )
         template_from_client = self.client.stacks.template(stack_identifier)
         self.assertEqual(self.template, template_from_client)
-
-    def test_template_version(self):
-        template_versions = self.client.template_versions.list()
-        supported_template_versions = ["2013-05-23", "2014-10-16",
-                                       "2015-04-30", "2015-10-15",
-                                       "2012-12-12", "2010-09-09",
-                                       "2016-04-08", "2016-10-14", "newton",
-                                       "2017-02-24", "ocata",
-                                       "2017-09-01", "pike",
-                                       "2018-03-02", "queens"]
-        for template in template_versions:
-            self.assertIn(template.version.split(".")[1],
-                          supported_template_versions)
 
     def test_resource_types(self):
         resource_types = self.client.resource_types.list()
