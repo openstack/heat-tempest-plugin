@@ -1,0 +1,27 @@
+heat_template_version: 2015-10-15
+description: |
+  The intermediate stack (containing a local nested stack) to be instantiated
+  remotely in the remote deeply-nested stack test.
+
+parameters:
+  name:
+    type: string
+    description: Name of the router
+    constraints:
+      - allowed_pattern: "[a-z][a-z0-9-]{1,}"
+  network_name:
+    type: string
+    description: The public network to connect to
+    constraints:
+      - custom_constraint: neutron.network
+
+resources:
+  network_stack_as_custom_type:
+    type: remote_nested_base.yaml
+    properties:
+      name: {get_param: name}
+      network_name: {get_param: network_name}
+
+outputs:
+  router:
+    value: {get_attr: [network_stack_as_custom_type, router]}

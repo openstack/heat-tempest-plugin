@@ -1,0 +1,29 @@
+heat_template_version: 2015-10-15
+description: |
+  The base stack (containing an actual resource) for the remote deeply-nested
+  stack test.
+
+parameters:
+  name:
+    type: string
+    description: Name of the router
+    constraints:
+      - allowed_pattern: "[a-z][a-z0-9-]{1,}"
+  network_name:
+    type: string
+    description: The network to connect to
+    constraints:
+      - custom_constraint: neutron.network
+
+resources:
+  router:
+    type: OS::Neutron::Router
+    properties:
+      name:
+        list_join: ['-', [{ get_param: name }, 'router']]
+      external_gateway_info:
+        network: {get_param: network_name}
+
+outputs:
+  router:
+    value: {get_resource: router}
