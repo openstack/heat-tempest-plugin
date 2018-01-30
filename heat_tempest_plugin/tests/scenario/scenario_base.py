@@ -10,6 +10,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import os
+import yaml
+
+from heatclient.common import template_utils
 from oslo_utils import reflection
 
 from heat_tempest_plugin.common import test
@@ -33,9 +37,19 @@ class ScenarioTestsBase(test.HeatIntegrationTest):
         if not self.conf.minimal_instance_type:
             raise self.skipException("No minimal flavor configured to test")
 
+    def _load_template(self, base_file, file_name, sub_dir=None, files=None):
+        sub_dir = sub_dir or ''
+        filepath = os.path.join(os.path.dirname(os.path.realpath(base_file)),
+                                sub_dir, file_name)
+        _files, template = template_utils.get_template_contents(filepath,
+                                                                files=files)
+        return yaml.safe_dump(template)
+
     def launch_stack(self, template_name, expected_status='CREATE_COMPLETE',
                      parameters=None, **kwargs):
-        template = self._load_template(__file__, template_name, self.sub_dir)
+        files = kwargs.get('files', {})
+        template = self._load_template(__file__, template_name, self.sub_dir,
+                                       files)
 
         parameters = parameters or {}
 
@@ -45,7 +59,7 @@ class ScenarioTestsBase(test.HeatIntegrationTest):
         stack_id = self.stack_create(
             stack_name=kwargs.get('stack_name'),
             template=template,
-            files=kwargs.get('files'),
+            files=files,
             parameters=parameters,
             environment=kwargs.get('environment'),
             expected_status=expected_status
