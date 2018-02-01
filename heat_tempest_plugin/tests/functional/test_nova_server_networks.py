@@ -126,6 +126,46 @@ outputs:
     value: {get_attr: [server, networks]}
 '''
 
+server_with_no_nets_template = '''
+heat_template_version: 2016-04-08
+description: Test template to test nova server network updates.
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+resources:
+  net:
+    type: OS::Neutron::Net
+    properties:
+      name: the_net
+  subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      name: the_subnet
+      network: {get_resource: net}
+      cidr: 11.11.11.0/24
+  server:
+    type: OS::Nova::Server
+    properties:
+      image: {get_param: image}
+      flavor: {get_param: flavor}
+      networks: $NETWORKS
+outputs:
+  port0_id:
+    value: {get_attr: [server, addresses, the_net, 0, port]}
+  port1_id:
+    value: {get_attr: [server, addresses, the_net, 1, port]}
+  port2_id:
+    value: {get_attr: [server, addresses, the_net, 2, port]}
+  port0_ip_addr:
+    value: {get_attr: [server, addresses, the_net, 0, addr]}
+  port1_ip_addr:
+    value: {get_attr: [server, addresses, the_net, 1, addr]}
+  port2_ip_addr:
+    value: {get_attr: [server, addresses, the_net, 2, addr]}
+'''
+
 
 class CreateServerTest(functional_base.FunctionalTestsBase):
 
@@ -182,3 +222,205 @@ class CreateServerTest(functional_base.FunctionalTestsBase):
             template=server_with_port_template,
             stack_name='server_with_port',
             parameters=parms)
+
+
+class UpdateServerNetworksTest(functional_base.FunctionalTestsBase):
+    def setUp(self):
+        super(UpdateServerNetworksTest, self).setUp()
+        self.params = {'flavor': self.conf.minimal_instance_type,
+                       'image': self.conf.minimal_image_ref}
+
+    def get_outputs(self, stack_identifier, output_key):
+        stack = self.client.stacks.get(stack_identifier)
+        return self._stack_output(stack, output_key)
+
+    def test_create_update_server_swap_network_subnet(self):
+        '''Test updating stack with:
+
+        old_snippet
+          networks:
+            - network: {get_resource: net}
+        new_snippet
+          networks:
+            - subnet: {get_resource: subnet}
+        '''
+        template = server_with_no_nets_template.replace(
+            '$NETWORKS', '[{network: {get_resource: net}}]')
+        stack_identifier = self.stack_create(
+            template=template,
+            stack_name='swap_network_subnet',
+            parameters=self.params)
+        port0 = self.get_outputs(stack_identifier, 'port0_id')
+        template_update = server_with_no_nets_template.replace(
+            '$NETWORKS', '[{subnet: {get_resource: subnet}}]')
+        self.update_stack(stack_identifier, template_update,
+                          parameters=self.params)
+        self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
+
+    def test_create_update_server_swap_network_port(self):
+        '''Test updating stack with:
+
+        old_snippet
+          networks:
+            - network: {get_resource: net}
+        new_snippet
+          networks:
+            - port: <the_port_created_on_stack_create>
+        '''
+        template = server_with_no_nets_template.replace(
+            '$NETWORKS', '[{network: {get_resource: net}}]')
+        stack_identifier = self.stack_create(
+            template=template,
+            stack_name='swap_network_port',
+            parameters=self.params)
+        port0 = self.get_outputs(stack_identifier, 'port0_id')
+        template_update = server_with_no_nets_template.replace(
+            '$NETWORKS', '[{port: ' + port0 + '}]')
+        self.update_stack(stack_identifier, template_update,
+                          parameters=self.params)
+        self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
+
+    def test_create_update_server_swap_subnet_network(self):
+        '''Test updating stack with:
+
+        old_snippet
+          networks:
+            - subnet: {get_resource: subnet}
+        new_snippet
+          networks:
+            - network: {get_resource: net}
+        '''
+        template = server_with_no_nets_template.replace(
+            '$NETWORKS', '[{subnet: {get_resource: subnet}}]')
+        stack_identifier = self.stack_create(
+            template=template,
+            stack_name='swap_subnet_network',
+            parameters=self.params)
+        port0 = self.get_outputs(stack_identifier, 'port0_id')
+        template_update = server_with_no_nets_template.replace(
+            '$NETWORKS', '[{network: {get_resource: net}}]')
+        self.update_stack(stack_identifier, template_update,
+                          parameters=self.params)
+        self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
+
+    def test_create_update_server_add_subnet(self):
+        '''Test updating stack with:
+
+        old_snippet
+          networks:
+            - network: {get_resource: net}
+        new_snippet
+          networks:
+            - network: {get_resource: net}
+              subnet: {get_resource: subnet}
+        '''
+        template = server_with_no_nets_template.replace(
+            '$NETWORKS', '[{network: {get_resource: net}}]')
+        stack_identifier = self.stack_create(
+            template=template,
+            stack_name='add_subnet',
+            parameters=self.params)
+        port0 = self.get_outputs(stack_identifier, 'port0_id')
+        template_update = server_with_no_nets_template.replace(
+            '$NETWORKS',
+            '[{network: {get_resource: net}, subnet: {get_resource: subnet}}]')
+        self.update_stack(stack_identifier, template_update,
+                          parameters=self.params)
+        self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
+
+    def test_create_update_server_add_same_fixed_ip(self):
+        '''Test updating stack with:
+
+        old_snippet
+          networks:
+            - network: {get_resource: net}
+        new_snippet
+          networks:
+            - network: {get_resource: net}
+              fixed_ip: <the_same_ip_already_allocated>
+        '''
+        template = server_with_no_nets_template.replace(
+            '$NETWORKS',
+            '[{network: {get_resource: net}}]')
+        stack_identifier = self.stack_create(
+            template=template,
+            stack_name='same_fixed_ip',
+            parameters=self.params)
+        port0 = self.get_outputs(stack_identifier, 'port0_id')
+        port0_ip = self.get_outputs(stack_identifier, 'port0_ip_addr')
+        template_update = server_with_no_nets_template.replace(
+            '$NETWORKS',
+            '[{network: {get_resource: net}, fixed_ip: ' + port0_ip + '}]')
+        self.update_stack(stack_identifier, template_update,
+                          parameters=self.params)
+        self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
+
+    def test_create_update_server_add_network(self):
+        '''Test updating stack with:
+
+        old_snippet
+          networks:
+            - subnet: {get_resource: subnet}
+        new_snippet
+          networks:
+            - network: {get_resource: net}
+              subnet: {get_resource: subnet}
+        '''
+        template = server_with_no_nets_template.replace(
+            '$NETWORKS', '[{subnet: {get_resource: subnet}}]')
+        stack_identifier = self.stack_create(
+            template=template,
+            stack_name='add_network',
+            parameters=self.params)
+        port0 = self.get_outputs(stack_identifier, 'port0_id')
+        template_update = server_with_no_nets_template.replace(
+            '$NETWORKS',
+            '[{network: {get_resource: net}, subnet: {get_resource: subnet}}]')
+        self.update_stack(stack_identifier, template_update,
+                          parameters=self.params)
+        self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
+
+    def test_create_update_server_multi_networks_swaps(self):
+        '''Test updating stack with:
+
+         old_snippet:
+           networks:
+             - network: {get_resource: net}
+             - network: {get_resource: net}
+               fixed_ip: 11.11.11.33
+             - subnet: {get_resource: subnet}
+         new_snippet:
+           networks:
+             - subnet: {get_resource: subnet}
+             - network: {get_resource: net}
+             - network: {get_resource: net}
+               subnet: {get_resource: subnet}
+        '''
+        old_snippet = """
+        - network: {get_resource: net}
+        - network: {get_resource: net}
+          fixed_ip: 11.11.11.33
+        - subnet: {get_resource: subnet}
+"""
+        new_snippet = """
+        - subnet: {get_resource: subnet}
+        - network: {get_resource: net}
+        - network: {get_resource: net}
+          subnet: {get_resource: subnet}
+"""
+        template = server_with_no_nets_template.replace(
+            '$NETWORKS', old_snippet)
+        stack_identifier = self.stack_create(
+            template=template,
+            stack_name='multi_networks_swaps',
+            parameters=self.params)
+        port0 = self.get_outputs(stack_identifier, 'port0_id')
+        port1 = self.get_outputs(stack_identifier, 'port1_id')
+        port2 = self.get_outputs(stack_identifier, 'port2_id')
+        template_update = server_with_no_nets_template.replace(
+            '$NETWORKS', new_snippet)
+        self.update_stack(stack_identifier, template_update,
+                          parameters=self.params)
+        self.assertEqual(port0, self.get_outputs(stack_identifier, 'port0_id'))
+        self.assertEqual(port1, self.get_outputs(stack_identifier, 'port1_id'))
+        self.assertEqual(port2, self.get_outputs(stack_identifier, 'port2_id'))
