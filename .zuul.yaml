@@ -1,5 +1,4 @@
 - project:
-    name: openstack/heat-tempest-plugin
     check:
       jobs:
         - heat-functional-orig-mysql-lbaasv2
