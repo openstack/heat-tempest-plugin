@@ -13,16 +13,19 @@
 
 """A test module to exercise the Heat API with gabbi.  """
 
+import keystoneauth1
 import os
+import sys
 import unittest
 
 from gabbi import driver
-from six.moves.urllib import parse as urlparse
+from oslo_log import log as logging
 from tempest import config
 
 from heat_tempest_plugin.common import test
 from heat_tempest_plugin.services import clients
 
+LOG = logging.getLogger(__name__)
 TESTS_DIR = 'gabbits'
 
 
@@ -30,16 +33,45 @@ def load_tests(loader, tests, pattern):
     """Provide a TestSuite to the discovery process."""
     test_dir = os.path.join(os.path.dirname(__file__), TESTS_DIR)
 
+    endpoint = None
     conf = config.CONF.heat_plugin
-    if conf.auth_url is None:
-        # It's not configured, let's not load tests
-        return
-    manager = clients.ClientManager(conf)
-    endpoint = manager.identity_client.get_endpoint_url(
-        'orchestration', region=conf.region, endpoint_type=conf.endpoint_type)
-    host = urlparse.urlparse(endpoint).hostname
-    os.environ['OS_TOKEN'] = manager.identity_client.auth_token
-    os.environ['PREFIX'] = test.rand_name('api')
+    if conf.auth_url:
+        try:
+            manager = clients.ClientManager(conf)
+            endpoint = manager.identity_client.get_endpoint_url(
+                'orchestration', region=conf.region,
+                endpoint_type=conf.endpoint_type)
+            os.environ['OS_TOKEN'] = manager.identity_client.auth_token
+            os.environ['PREFIX'] = test.rand_name('api')
+
+        # Catch the authentication exceptions that can happen if one of the
+        # following conditions occur:
+        #   1. conf.auth_url IP/port is incorrect or keystone not available
+        #      (ConnectFailure)
+        #   2. conf.auth_url is malformed (BadRequest, UnknownConnectionError,
+        #      EndpointNotFound, NotFound, or DiscoveryFailure)
+        #   3. conf.username/password is incorrect (Unauthorized)
+        #   4. conf.project_name is missing/incorrect (EmptyCatalog)
+        # These exceptions should not prevent a test list from being returned,
+        # so just issue a warning log and move forward with test listing.
+        except (keystoneauth1.exceptions.http.BadRequest,
+                keystoneauth1.exceptions.http.Unauthorized,
+                keystoneauth1.exceptions.http.NotFound,
+                keystoneauth1.exceptions.catalog.EmptyCatalog,
+                keystoneauth1.exceptions.catalog.EndpointNotFound,
+                keystoneauth1.exceptions.discovery.DiscoveryFailure,
+                keystoneauth1.exceptions.connection.UnknownConnectionError,
+                keystoneauth1.exceptions.connection.ConnectFailure):
+            LOG.warn("Keystone auth exception: %s: %s" % (sys.exc_info()[0],
+                                                          sys.exc_info()[1]))
+            # Clear the auth_url, as there is no point in tempest trying
+            # to authenticate later with mis-configured or unreachable endpoint
+            conf.auth_url = None
+
+        except Exception:
+            LOG.error("Fatal exception: %s: %s" % (sys.exc_info()[0],
+                                                   sys.exc_info()[1]))
+            raise
 
     def register_test_case_id(test_case):
         tempest_id = test_case.test_data.get('desc')
@@ -60,7 +92,8 @@ def load_tests(loader, tests, pattern):
             else:
                 register_test_case_id(test_case)
 
-    api_tests = driver.build_tests(test_dir, loader, host=host,
-                                   url=endpoint, test_loader_name=__name__)
+    api_tests = driver.build_tests(test_dir, loader, url=endpoint, host="",
+                                   test_loader_name=__name__)
+
     register_test_suite_ids(api_tests)
     return api_tests
