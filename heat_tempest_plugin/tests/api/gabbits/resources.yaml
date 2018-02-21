@@ -32,7 +32,7 @@ tests:
   GET: $LOCATION
   redirects: True
   poll:
-    count: 5
+    count: 10
     delay: 1.0
   response_json_paths:
     $.stack.stack_status: CREATE_COMPLETE
