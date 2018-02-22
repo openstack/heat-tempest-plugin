@@ -86,7 +86,8 @@ def requires_convergence(test_method):
     return skipper(test_method)
 
 
-class HeatIntegrationTest(testscenarios.WithScenarios,
+class HeatIntegrationTest(testtools.testcase.WithAttributes,
+                          testscenarios.WithScenarios,
                           testtools.TestCase):
 
     def setUp(self):
