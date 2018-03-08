@@ -1,3 +1,20 @@
+- job:
+    name: heat-functional-convg-queens
+    parent: heat-functional-convg-mysql-lbaasv2
+    override-checkout: stable/queens
+
+- job:
+    name: heat-functional-orig-queens
+    parent: heat-functional-orig-mysql-lbaasv2
+    override-checkout: stable/queens
+
+- job:
+    name: heat-functional-convg-queens-py35
+    parent: heat-functional-convg-mysql-lbaasv2-py35
+    override-checkout: stable/queens
+
+
+
 - project:
     check:
       jobs:
@@ -5,6 +22,9 @@
         - heat-functional-convg-mysql-lbaasv2
         - heat-functional-convg-mysql-lbaasv2-non-apache
         - heat-functional-convg-mysql-lbaasv2-py35
+        - heat-functional-convg-queens
+        - heat-functional-convg-queens-py35
+        - heat-functional-orig-queens
     gate:
       jobs:
         - heat-functional-orig-mysql-lbaasv2
