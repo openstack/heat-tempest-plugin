@@ -34,6 +34,7 @@ from tempest import config
 
 LOG = logging.getLogger(__name__)
 _LOG_FORMAT = "%(levelname)8s [%(name)s] %(message)s"
+_resource_types = None
 
 
 def call_until_true(duration, sleep_for, func, *args, **kwargs):
@@ -84,6 +85,29 @@ def requires_convergence(test_method):
     skipper = testtools.skipUnless(convergence_enabled,
                                    "Convergence-only tests are disabled")
     return skipper(test_method)
+
+
+def requires_resource_type(resource_type):
+    '''Decorator for tests requiring a resource type.
+
+    The decorated test will be skipped when the resource type is not available.
+    '''
+    def decorator(test_method):
+        conf = getattr(config.CONF, 'heat_plugin', None)
+        if not conf or conf.auth_url is None:
+            return test_method
+
+        global _resource_types
+        if not _resource_types:
+            manager = clients.ClientManager(conf)
+            obj_rtypes = manager.orchestration_client.resource_types.list()
+            _resource_types = list(t.resource_type for t in obj_rtypes)
+        rtype_available = resource_type and resource_type in _resource_types
+        skipper = testtools.skipUnless(
+            rtype_available,
+            "%s resource type not available, skipping test." % resource_type)
+        return skipper(test_method)
+    return decorator
 
 
 class HeatIntegrationTest(testtools.testcase.WithAttributes,

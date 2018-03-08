@@ -17,6 +17,7 @@ import yaml
 
 from tempest.lib import decorators
 
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -72,6 +73,7 @@ outputs:
 '''
 
 
+@test.requires_resource_type('OS::Neutron::Trunk')
 class UpdateTrunkTest(functional_base.FunctionalTestsBase):
 
     @staticmethod
