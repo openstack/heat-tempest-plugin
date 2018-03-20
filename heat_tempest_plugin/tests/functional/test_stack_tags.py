@@ -72,7 +72,7 @@ resources:
     @decorators.idempotent_id('5ed79584-0684-4f9c-ae8e-44a8f874ec79')
     def test_hidden_stack(self):
         # Stack create with hidden stack tag
-        tags = 'foo,hidden'
+        tags = 'foo,%s' % self.conf.hidden_stack_tag
         self.stack_create(
             template=self.template,
             tags=tags)
