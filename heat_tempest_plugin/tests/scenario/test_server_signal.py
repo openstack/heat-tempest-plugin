@@ -29,6 +29,7 @@ class ServerSignalIntegrationTest(scenario_base.ScenarioTestsBase):
             'key_name': self.keypair_name,
             'flavor': flavor,
             'image': image,
+            'public_net': self.conf.floating_network_name,
             'timeout': self.conf.build_timeout,
             'user_data_format': user_data_format
         }
