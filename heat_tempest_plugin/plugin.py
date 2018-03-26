@@ -34,7 +34,11 @@ class HeatTempestPlugin(plugins.TempestPlugin):
                                   heat_config.ServiceAvailableGroup)
         config.register_opt_group(conf, heat_config.heat_group,
                                   heat_config.HeatGroup)
+        config.register_opt_group(conf, heat_config.heat_features_group,
+                                  heat_config.HeatFeaturesGroup)
 
     def get_opt_lists(self):
         return [(heat_config.heat_group.name,
-                 heat_config.HeatGroup)]
+                 heat_config.HeatGroup),
+                (heat_config.heat_features_group.name,
+                 heat_config.HeatFeaturesGroup)]

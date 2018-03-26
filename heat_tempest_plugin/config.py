@@ -156,7 +156,18 @@ HeatGroup = [
 
 ]
 
+heat_features_group = cfg.OptGroup(
+    name='heat_features_enabled',
+    title="Enabled Orchestration Service Features")
+
+HeatFeaturesGroup = [
+    cfg.BoolOpt('stack_cancel',
+                default=False,
+                help="If false, skip stack cancel tests")
+]
+
 
 def list_opts():
     yield heat_group.name, HeatGroup
+    yield heat_features_group.name, HeatFeaturesGroup
     yield service_available_group.name, ServiceAvailableGroup

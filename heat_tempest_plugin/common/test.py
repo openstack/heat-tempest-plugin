@@ -110,6 +110,22 @@ def requires_resource_type(resource_type):
     return decorator
 
 
+def requires_feature(feature):
+    '''Decorator for tests requring specific feature.
+
+    The decorated test will be skipped when a specific feature is disabled.
+    '''
+    def decorator(test_method):
+        features_group = getattr(config.CONF, 'heat_features_enabled', None)
+        if not features_group:
+            return test_method
+        feature_enabled = config.CONF.heat_features_enabled.get(feature, False)
+        skipper = testtools.skipUnless(feature_enabled,
+                                       "%s - Feature not enabled." % feature)
+        return skipper(test_method)
+    return decorator
+
+
 class HeatIntegrationTest(testtools.testcase.WithAttributes,
                           testscenarios.WithScenarios,
                           testtools.TestCase):
