@@ -1,3 +1,6 @@
+fixtures:
+    - AuthenticationFixture
+
 defaults:
   request_headers:
     X-Auth-Token: $ENVIRON['OS_TOKEN']

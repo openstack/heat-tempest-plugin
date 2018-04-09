@@ -24,6 +24,7 @@ from tempest import config
 
 from heat_tempest_plugin.common import test
 from heat_tempest_plugin.services import clients
+from heat_tempest_plugin.tests.api import fixtures
 
 LOG = logging.getLogger(__name__)
 TESTS_DIR = 'gabbits'
@@ -41,7 +42,6 @@ def load_tests(loader, tests, pattern):
             endpoint = manager.identity_client.get_endpoint_url(
                 'orchestration', region=conf.region,
                 endpoint_type=conf.endpoint_type)
-            os.environ['OS_TOKEN'] = manager.identity_client.auth_token
             os.environ['PREFIX'] = test.rand_name('api')
 
         # Catch the authentication exceptions that can happen if one of the
@@ -93,7 +93,7 @@ def load_tests(loader, tests, pattern):
                 register_test_case_id(test_case)
 
     api_tests = driver.build_tests(test_dir, loader, url=endpoint, host="",
+                                   fixture_module=fixtures,
                                    test_loader_name=__name__)
-
     register_test_suite_ids(api_tests)
     return api_tests
