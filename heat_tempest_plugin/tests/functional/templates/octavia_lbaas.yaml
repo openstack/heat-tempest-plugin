@@ -1,0 +1,86 @@
+heat_template_version: pike
+parameters:
+  app_port:
+    type: number
+    default: 8080
+  flavor:
+    type: string
+    default: m1.nano
+  image:
+    type: string
+    default: cirros-0.3.5-x86_64-disk
+  lb_port:
+    type: number
+    default: 80
+  network:
+    type: string
+    default: heat-net
+  subnet:
+    type: string
+    default: heat-subnet
+  member_count:
+    type: number
+    default: 1
+  lb_algorithm:
+    type: string
+    default: ROUND_ROBIN
+
+resources:
+  sec_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      rules:
+      - remote_ip_prefix: 0.0.0.0/0
+        protocol: tcp
+        port_range_min: {get_param: app_port}
+        port_range_max: {get_param: app_port}
+
+  pool_members:
+    type: OS::Heat::ResourceGroup
+    properties:
+      count: {get_param: member_count}
+      resource_def:
+        type: OS::Test::PoolMember
+        properties:
+          image: {get_param: image}
+          flavor: {get_param: flavor}
+          pool: {get_resource: pool}
+          app_port: {get_param: app_port}
+          network: {get_param: network}
+          sec_group: {get_resource: sec_group}
+          subnet: {get_param: subnet}
+
+  monitor:
+    type: OS::Octavia::HealthMonitor
+    properties:
+      delay: 3
+      type: HTTP
+      timeout: 3
+      max_retries: 3
+      pool: {get_resource: pool}
+
+  pool:
+    type: OS::Octavia::Pool
+    properties:
+      lb_algorithm: {get_param: lb_algorithm}
+      protocol: HTTP
+      listener: {get_resource: listener}
+
+  listener:
+    type: OS::Octavia::Listener
+    properties:
+      loadbalancer: {get_resource: loadbalancer}
+      protocol: HTTP
+      protocol_port: {get_param: lb_port}
+
+  loadbalancer:
+    type: OS::Octavia::LoadBalancer
+    properties:
+      vip_subnet: {get_param: subnet}
+outputs:
+  loadbalancer:
+    value: {get_attr: [loadbalancer, show]}
+  pool:
+    value: {get_attr: [pool, show]}
+  listener:
+    value: {get_attr: [listener, show]}
