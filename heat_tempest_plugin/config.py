@@ -153,7 +153,9 @@ HeatGroup = [
     cfg.StrOpt('heat_config_notify_script',
                default=('heat-config-notify'),
                help="Path to the script heat-config-notify"),
-
+    cfg.StrOpt('hidden_stack_tag',
+               default='data-processing-cluster',
+               help="Tag to be considered as hidden for stack tags tests"),
 ]
 
 heat_features_group = cfg.OptGroup(
