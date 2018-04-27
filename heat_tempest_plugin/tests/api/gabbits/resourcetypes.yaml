@@ -24,4 +24,4 @@ tests:
   status: 200
   response_json_paths:
     $.resources.TestResource.type: OS::Heat::TestResource
-    $.heat_template_version: '2016-10-14'
+    $.heat_template_version: /^20[1-9][0-9]-[0-1][0-9]-[0-3][0-9]$/
