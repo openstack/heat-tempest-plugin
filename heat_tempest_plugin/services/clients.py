@@ -174,6 +174,8 @@ class ClientManager(object):
         args = {
             'auth_version': self.auth_version,
             'session': self.identity_client.session,
+            'cacert': self.ca_file,
+            'insecure': self.insecure,
             'os_options': {'endpoint_type': self.conf.endpoint_type,
                            'region_name': self.conf.region,
                            'service_type': 'object-store'},
