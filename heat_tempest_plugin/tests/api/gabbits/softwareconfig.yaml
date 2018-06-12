@@ -63,14 +63,14 @@ tests:
   GET: /software_configs
   status: 200
   response_json_paths:
-    $.software_configs[0].group: script
+    $.software_configs[?id = "$RESPONSE['software_deployment.config_id']"].group: script
 
 - name: list software deployments
   desc: d26d1e90-4924-11e8-842f-0ed5f89f718b
   GET: /software_deployments
   status: 200
   response_json_paths:
-    $.software_deployments[0].server_id: dummy_server
+    $.software_deployments[?id= "$HISTORY['update deployment'].$RESPONSE['software_deployment.id']"].server_id: dummy_server
 
 - name: delete deployment
   desc: d26d1fda-4924-11e8-842f-0ed5f89f718b
