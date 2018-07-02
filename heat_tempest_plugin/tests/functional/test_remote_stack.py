@@ -15,6 +15,7 @@ from heatclient import exc
 import six
 from tempest.lib import decorators
 
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -26,6 +27,7 @@ resources:
     type: OS::Heat::Stack
     properties:
       context:
+$MULTI_CLOUD_PROPERTIES
         region_name: RegionOne
       template:
         get_file: remote_stack.yaml
@@ -46,6 +48,7 @@ outputs:
 
     def setUp(self):
         super(RemoteStackTest, self).setUp()
+        self.template = self.template.replace('$MULTI_CLOUD_PROPERTIES', '')
         # replacing the template region with the one from the config
         self.template = self.template.replace('RegionOne',
                                               self.conf.region)
@@ -74,6 +77,52 @@ outputs:
 
         rsrc = self.client.resources.get(stack_id, 'my_stack')
         remote_id = rsrc.physical_resource_id
+        rstack = self.client.stacks.get(remote_id)
+        self.assertEqual(remote_id, rstack.id)
+        remote_output_value = self._stack_output(rstack, 'remote_key')
+        self.assertEqual(32, len(remote_output_value))
+        self.assertEqual(parent_output_value, remote_output_value)
+
+        remote_resources = {'random1': 'OS::Heat::RandomString'}
+        self.assertEqual(remote_resources, self.list_resources(remote_id))
+
+    def _create_with_cloud_credential(self):
+        cred_sec_id = self.conf.credential_secret_id
+        if not cred_sec_id:
+            raise self.skipException(
+                "No credential_secret_id configured to test")
+        props = """
+        credential_secret_id: %(credential_secret_id)s""" % {
+            'credential_secret_id': cred_sec_id
+        }
+
+        self.template = self.template.replace('$MULTI_CLOUD_PROPERTIES', props)
+        files = {'remote_stack.yaml': self.remote_template}
+        stack_id = self.stack_create(files=files)
+
+        expected_resources = {'my_stack': 'OS::Heat::Stack'}
+        self.assertEqual(expected_resources, self.list_resources(stack_id))
+
+        return stack_id
+
+    @test.requires_feature('multi_cloud')
+    @decorators.idempotent_id('6b61d8e3-79df-4e84-bdcf-f734da39d52b')
+    def test_stack_create_with_cloud_credential(self):
+        """Test on create multi (OpenStack) cloud with credential
+
+        This test will use same region to simulate cross OpenStack scenario.
+        Provide credential_secret_id as input property.
+        """
+        stack_id = self._create_with_cloud_credential()
+        stack = self.client.stacks.get(stack_id)
+        output = self._stack_output(stack, 'key')
+        parent_output_value = output['remote_key']
+        self.assertEqual(32, len(parent_output_value))
+
+        rsrc = self.client.resources.get(stack_id, 'my_stack')
+        remote_id = rsrc.physical_resource_id
+        # For now we use same OpenStack environment as a simulation of remote
+        # OpenStack site.
         rstack = self.client.stacks.get(remote_id)
         self.assertEqual(remote_id, rstack.id)
         remote_output_value = self._stack_output(rstack, 'remote_key')
