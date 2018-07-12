@@ -94,9 +94,10 @@ outputs:
         ex = self.assertRaises(exc.HTTPBadRequest, self.stack_create, **kwargs)
 
         error_msg = ('ERROR: Cannot establish connection to Heat endpoint '
-                     'at region "DARKHOLE" due to "publicURL endpoint for '
+                     'at region "DARKHOLE" due to '
+                     '"(?:public|internal|admin)(?:URL)? endpoint for '
                      'orchestration service in DARKHOLE region not found"')
-        self.assertEqual(error_msg, six.text_type(ex))
+        self.assertRegex(six.text_type(ex), error_msg)
 
     @decorators.idempotent_id('b2190dfc-d223-4595-b168-6c42b0f3a3e5')
     def test_stack_resource_validation_fail(self):

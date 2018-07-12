@@ -111,7 +111,7 @@ class ClientManager(object):
             self.HEATCLIENT_VERSION,
             endpoint,
             session=session,
-            endpoint_type='publicURL',
+            endpoint_type=self.conf.endpoint_type,
             service_type='orchestration',
             region_name=self.conf.region,
             username=self._username(),

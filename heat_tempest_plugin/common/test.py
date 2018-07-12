@@ -257,7 +257,7 @@ class HeatIntegrationTest(testtools.testcase.WithAttributes,
     def is_service_available(self, service_type):
         try:
             self.identity_client.get_endpoint_url(
-                service_type, self.conf.region)
+                service_type, self.conf.region, self.conf.endpoint_type)
         except kc_exceptions.EndpointNotFound:
             return False
         else:
