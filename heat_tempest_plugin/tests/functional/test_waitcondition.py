@@ -54,7 +54,7 @@ outputs:
             password=signal['password'],
             project_id=signal['project_id'])
         endpoint = ks.service_catalog.url_for(
-            service_type='messaging', endpoint_type='publicURL')
+            service_type='messaging', endpoint_type=self.conf.endpoint_type)
         conf = {
             'auth_opts': {
                 'backend': 'keystone',
