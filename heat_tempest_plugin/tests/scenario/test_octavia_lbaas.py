@@ -13,11 +13,11 @@
 from tempest.lib import decorators
 
 from heat_tempest_plugin.common import test
-from heat_tempest_plugin.tests.functional import functional_base
+from heat_tempest_plugin.tests.scenario import scenario_base
 
 
 @test.requires_resource_type('OS::Octavia::LoadBalancer')
-class LoadBalancerTest(functional_base.FunctionalTestsBase):
+class LoadBalancerTest(scenario_base.ScenarioTestsBase):
     def setUp(self):
         super(LoadBalancerTest, self).setUp()
         self.template_name = 'octavia_lbaas.yaml'
@@ -36,11 +36,9 @@ class LoadBalancerTest(functional_base.FunctionalTestsBase):
         )
         self.files = {'lb_member.yaml': member_template}
         self.env = {'resource_registry': {
-            'OS::Test::PoolMember': 'lb_member.yaml'}}
+            'OS::Test::PoolMember': self.member_template_name}}
 
-        self.template = self._load_template(__file__, self.template_name,
-                                            self.sub_dir)
-        return self.stack_create(template=self.template,
+        return self.launch_stack(self.template_name,
                                  parameters=self.parameters,
                                  files=self.files,
                                  environment=self.env)
@@ -54,10 +52,8 @@ class LoadBalancerTest(functional_base.FunctionalTestsBase):
         self.parameters['lb_algorithm'] = 'SOURCE_IP'
 
         self.update_stack(stack_identifier,
-                          template=self.template,
                           parameters=self.parameters,
-                          files=self.files,
-                          environment=self.env)
+                          existing=True)
         stack = self.client.stacks.get(stack_identifier)
 
         output = self._stack_output(stack, 'loadbalancer')
@@ -76,10 +72,8 @@ class LoadBalancerTest(functional_base.FunctionalTestsBase):
         # add pool member
         self.parameters['member_count'] = 2
         self.update_stack(stack_identifier,
-                          template=self.template,
                           parameters=self.parameters,
-                          files=self.files,
-                          environment=self.env)
+                          existing=True)
         stack = self.client.stacks.get(stack_identifier)
 
         output = self._stack_output(stack, 'loadbalancer')
@@ -89,10 +83,8 @@ class LoadBalancerTest(functional_base.FunctionalTestsBase):
         # delete pool member
         self.parameters['member_count'] = 1
         self.update_stack(stack_identifier,
-                          template=self.template,
                           parameters=self.parameters,
-                          files=self.files,
-                          environment=self.env)
+                          existing=True)
         stack = self.client.stacks.get(stack_identifier)
 
         output = self._stack_output(stack, 'loadbalancer')
