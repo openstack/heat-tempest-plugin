@@ -10,7 +10,6 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import os
 import random
 import re
 import subprocess
@@ -205,13 +204,6 @@ class HeatIntegrationTest(testtools.testcase.WithAttributes,
         for server in servers:
             LOG.info('Console output for %s', server.id)
             LOG.info(server.get_console_output())
-
-    def _load_template(self, base_file, file_name, sub_dir=None):
-        sub_dir = sub_dir or ''
-        filepath = os.path.join(os.path.dirname(os.path.realpath(base_file)),
-                                sub_dir, file_name)
-        with open(filepath) as f:
-            return f.read()
 
     def create_keypair(self, client=None, name=None):
         if client is None:
