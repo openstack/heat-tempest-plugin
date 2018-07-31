@@ -155,7 +155,6 @@ tests:
     delay: 1.0
   response_json_paths:
     $.stack.stack_status: UPDATE_COMPLETE
-    $.stack.updated_time: /^(?!$HISTORY['poll for stack UPDATE_COMPLETE'].$RESPONSE['$.stack.updated_time'])/
 
 - name: list stack outputs
   desc: bbd98b50-b75b-44a1-b7e8-0a68fd7c6d33
