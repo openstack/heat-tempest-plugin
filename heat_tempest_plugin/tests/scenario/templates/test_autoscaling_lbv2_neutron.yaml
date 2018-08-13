@@ -27,6 +27,9 @@ parameters:
   timeout:
     type: number
     default: 600
+  wc_extra_args:
+    type: string
+    default: ""
 
 resources:
 
@@ -56,6 +59,7 @@ resources:
           pool: { get_resource: pool }
           subnet: { get_param: subnet }
           timeout: { get_param: timeout }
+          wc_extra_args: { get_param: wc_extra_args }
 
   scale_up:
     type: OS::Heat::ScalingPolicy

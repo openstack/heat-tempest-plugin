@@ -113,6 +113,8 @@ class CfnInitIntegrationTest(scenario_base.ScenarioTestsBase):
             'timeout': self.conf.build_timeout,
             'subnet': self.net['subnets'][0],
         }
+        if self.conf.vm_to_heat_api_insecure:
+            parameters['SignalExtraArgs'] = '--insecure'
 
         # Launch stack
         stack_id = self.launch_stack(

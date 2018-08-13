@@ -45,6 +45,11 @@ parameters:
     description: Size of volume
     default: 1
 
+  wc_extra_args:
+    type: string
+    description: extra options to add to CURL command
+    default: ""
+
 resources:
   volume:
     deletion_policy: 'Snapshot'
@@ -86,15 +91,16 @@ resources:
               mount /dev/dev_name /mnt
               echo "test_string" > /mnt/testfile
               umount /mnt
-              curl -X PUT -H 'Content-Type:' --data-binary '{"Status": "SUCCESS", "Reason": "Test Complete", "Data": "Completed volume configuration.", "UniqueId": "instance1"}' "wc_url"
+              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "SUCCESS", "Reason": "Test Complete", "Data": "Completed volume configuration.", "UniqueId": "instance1"}' "wc_url"
             else
-              curl -X PUT -H 'Content-Type:' --data-binary '{"Status": "FAILURE", "Reason": "Test Failed", "Data": "Expected device dev_name not found.", "UniqueId": "instance1"}' "wc_url"
+              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "FAILURE", "Reason": "Test Failed", "Data": "Expected device dev_name not found.", "UniqueId": "instance1"}' "wc_url"
             fi
           params:
             wc_url: { get_resource: wait_handle }
             dev_name: { get_param: dev_name }
             rescan_timeout: { get_param: rescan_timeout }
             test_string: { get_param: test_string }
+            wc_extra_args: { get_param: wc_extra_args }
 
   wait_handle:
     type: OS::Heat::UpdateWaitConditionHandle

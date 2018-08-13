@@ -39,6 +39,11 @@ parameters:
     description: Description of volume
     default: A volume description
 
+  wc_extra_args:
+    type: string
+    description: extra options to add to CURL command
+    default: ""
+
 resources:
   volume:
     type: OS::Cinder::Volume
@@ -77,14 +82,15 @@ resources:
             then
               mount /dev/dev_name /mnt
               TESTDATA=$(cat /mnt/testfile)
-              curl -X PUT -H 'Content-Type:' --data-binary '{"Status": "SUCCESS", "Reason": "Test Complete", "Data": "Volume Data:'$TESTDATA'", "UniqueId": "instance1"}' "wc_url"
+              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "SUCCESS", "Reason": "Test Complete", "Data": "Volume Data:'$TESTDATA'", "UniqueId": "instance1"}' "wc_url"
             else
-              curl -X PUT -H 'Content-Type:' --data-binary '{"Status": "FAILURE", "Reason": "Test Failed", "Data": "Expected device dev_name not found.", "UniqueId": "instance1"}' "wc_url"
+              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "FAILURE", "Reason": "Test Failed", "Data": "Expected device dev_name not found.", "UniqueId": "instance1"}' "wc_url"
             fi
           params:
             wc_url: { get_resource: wait_handle }
             dev_name: { get_param: dev_name }
             rescan_timeout: { get_param: rescan_timeout }
+            wc_extra_args: { get_param: wc_extra_args }
 
   wait_handle:
     type: OS::Heat::UpdateWaitConditionHandle

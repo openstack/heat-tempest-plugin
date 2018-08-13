@@ -121,7 +121,8 @@ class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
             'timeout': self.conf.build_timeout,
             'network': self.net['id']
         }
-
+        if self.conf.vm_to_heat_api_insecure:
+            parameters['wc_extra_args'] = '--insecure'
         # Launch stack
         stack_id = self.launch_stack(
             template_name='test_volumes_delete_snapshot.yaml',
