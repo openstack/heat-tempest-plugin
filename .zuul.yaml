@@ -16,6 +16,9 @@
 
 
 - project:
+    templates:
+      - check-requirements
+      - tempest-plugin-jobs
     check:
       jobs:
         - heat-functional-orig-mysql-lbaasv2
@@ -26,6 +29,7 @@
         - heat-functional-convg-queens-py35
         - heat-functional-orig-queens
     gate:
+      queue: heat
       jobs:
         - heat-functional-orig-mysql-lbaasv2
         - heat-functional-convg-mysql-lbaasv2
