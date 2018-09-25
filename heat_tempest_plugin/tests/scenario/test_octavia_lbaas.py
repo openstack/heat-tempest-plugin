@@ -45,10 +45,11 @@ class LoadBalancerTest(scenario_base.ScenarioTestsBase):
 
     @decorators.idempotent_id('5d2c4452-4433-4438-899c-7711c01d3c50')
     def test_create_update_loadbalancer(self):
+        statuses = ['PENDING_UPDATE', 'ACTIVE']
         stack_identifier = self._create_stack()
         stack = self.client.stacks.get(stack_identifier)
         output = self._stack_output(stack, 'loadbalancer')
-        self.assertEqual('ONLINE', output['operating_status'])
+        self.assertIn(output['provisioning_status'], statuses)
         self.parameters['lb_algorithm'] = 'SOURCE_IP'
 
         self.update_stack(stack_identifier,
@@ -57,16 +58,17 @@ class LoadBalancerTest(scenario_base.ScenarioTestsBase):
         stack = self.client.stacks.get(stack_identifier)
 
         output = self._stack_output(stack, 'loadbalancer')
-        self.assertEqual('ONLINE', output['operating_status'])
+        self.assertIn(output['provisioning_status'], statuses)
         output = self._stack_output(stack, 'pool')
         self.assertEqual('SOURCE_IP', output['lb_algorithm'])
 
     @decorators.idempotent_id('970e91af-1be8-4990-837b-66f9b5aff2b9')
     def test_add_delete_poolmember(self):
+        statuses = ['PENDING_UPDATE', 'ACTIVE']
         stack_identifier = self._create_stack()
         stack = self.client.stacks.get(stack_identifier)
         output = self._stack_output(stack, 'loadbalancer')
-        self.assertEqual('ONLINE', output['operating_status'])
+        self.assertIn(output['provisioning_status'], statuses)
         output = self._stack_output(stack, 'pool')
         self.assertEqual(1, len(output['members']))
         # add pool member
@@ -77,7 +79,7 @@ class LoadBalancerTest(scenario_base.ScenarioTestsBase):
         stack = self.client.stacks.get(stack_identifier)
 
         output = self._stack_output(stack, 'loadbalancer')
-        self.assertEqual('ONLINE', output['operating_status'])
+        self.assertIn(output['provisioning_status'], statuses)
         output = self._stack_output(stack, 'pool')
         self.assertEqual(2, len(output['members']))
         # delete pool member
@@ -88,6 +90,6 @@ class LoadBalancerTest(scenario_base.ScenarioTestsBase):
         stack = self.client.stacks.get(stack_identifier)
 
         output = self._stack_output(stack, 'loadbalancer')
-        self.assertEqual('ONLINE', output['operating_status'])
+        self.assertIn(output['provisioning_status'], statuses)
         output = self._stack_output(stack, 'pool')
         self.assertEqual(1, len(output['members']))
