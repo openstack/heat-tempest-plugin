@@ -13,6 +13,20 @@
     parent: heat-functional-convg-mysql-lbaasv2-py35
     override-checkout: stable/queens
 
+- job:
+    name: heat-functional-convg-rocky
+    parent: heat-functional-convg-mysql-lbaasv2
+    override-checkout: stable/rocky
+
+- job:
+    name: heat-functional-orig-rocky
+    parent: heat-functional-orig-mysql-lbaasv2
+    override-checkout: stable/rocky
+
+- job:
+    name: heat-functional-convg-rocky-py35
+    parent: heat-functional-convg-mysql-lbaasv2-py35
+    override-checkout: stable/rocky
 
 
 - project:
@@ -28,6 +42,9 @@
         - heat-functional-convg-queens
         - heat-functional-convg-queens-py35
         - heat-functional-orig-queens
+        - heat-functional-convg-rocky
+        - heat-functional-convg-rocky-py35
+        - heat-functional-orig-rocky
     gate:
       queue: heat
       jobs:
