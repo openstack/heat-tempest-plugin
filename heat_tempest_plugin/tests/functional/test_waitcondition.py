@@ -16,9 +16,11 @@ from keystoneclient.v3 import client as keystoneclient
 from tempest.lib import decorators
 from zaqarclient.queues.v2 import client as zaqarclient
 
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 
+@test.requires_service_type('messaging')
 class ZaqarWaitConditionTest(functional_base.FunctionalTestsBase):
     template = '''
 heat_template_version: "2013-05-23"

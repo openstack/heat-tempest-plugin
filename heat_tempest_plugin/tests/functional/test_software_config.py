@@ -183,6 +183,7 @@ properties:
                           verify=self.verify_cert)
 
 
+@test.requires_service_type('messaging')
 class ZaqarSignalTransportTest(functional_base.FunctionalTestsBase):
     server_template = '''
 heat_template_version: "2013-05-23"

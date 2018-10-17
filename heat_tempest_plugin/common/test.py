@@ -109,6 +109,29 @@ def requires_resource_type(resource_type):
     return decorator
 
 
+def requires_service_type(service_type):
+    '''Decorator for tests requiring a specific service being available.
+
+    The decorated test will be skipped when a service is not available.
+    '''
+    def decorator(test_method):
+        conf = getattr(config.CONF, 'heat_plugin', None)
+        if not conf or conf.auth_url is None:
+            return test_method
+
+        manager = clients.ClientManager(conf)
+        try:
+            manager.identity_client.get_endpoint_url(
+                service_type, conf.region, conf.endpoint_type)
+        except kc_exceptions.EndpointNotFound:
+            skipper = testtools.skip(
+                "%s service not available, skipping test." % service_type)
+            return skipper(test_method)
+        else:
+            return test_method
+    return decorator
+
+
 def requires_feature(feature):
     '''Decorator for tests requring specific feature.
 
@@ -245,15 +268,6 @@ class HeatIntegrationTest(testtools.testcase.WithAttributes,
         except network_exceptions.NeutronClientException:
             return False
         return True
-
-    def is_service_available(self, service_type):
-        try:
-            self.identity_client.get_endpoint_url(
-                service_type, self.conf.region, self.conf.endpoint_type)
-        except kc_exceptions.EndpointNotFound:
-            return False
-        else:
-            return True
 
     @staticmethod
     def _stack_output(stack, output_key, validate_errors=True):

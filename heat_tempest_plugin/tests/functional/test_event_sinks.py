@@ -19,6 +19,7 @@ from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 
+@test.requires_service_type('messaging')
 class ZaqarEventSinkTest(functional_base.FunctionalTestsBase):
     template = '''
 heat_template_version: "2013-05-23"
