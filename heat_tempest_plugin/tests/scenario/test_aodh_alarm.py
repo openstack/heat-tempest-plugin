@@ -51,9 +51,9 @@ class AodhAlarmTest(scenario_base.ScenarioTestsBase):
         stack_identifier = self.stack_create(template=self.template,
                                              parameters=parameters)
 
-        measures = [{'timestamp': test.isotime(datetime.datetime.now()),
+        measures = [{'timestamp': test.isotime(datetime.datetime.utcnow()),
                      'value': 100}, {'timestamp': test.isotime(
-                         datetime.datetime.now() + datetime.timedelta(
+                         datetime.datetime.utcnow() + datetime.timedelta(
                              minutes=1)), 'value': 100}]
         # send measures(should cause the alarm to fire)
         self.metric_client.metric.add_measures(metric['id'], measures)
