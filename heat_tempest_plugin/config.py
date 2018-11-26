@@ -16,9 +16,12 @@ service_available_group = cfg.OptGroup(name="service_available",
                                        title="Available OpenStack Services")
 
 ServiceAvailableGroup = [
-    cfg.BoolOpt("heat_plugin",
+    cfg.BoolOpt("heat",
                 default=True,
-                help="Whether or not heat is expected to be available"),
+                help="Whether or not heat is expected to be available",
+                deprecated_opts=[cfg.DeprecatedOpt(
+                    'heat_plugin',
+                    group='service_available')]),
 ]
 
 heat_group = cfg.OptGroup(name="heat_plugin",
