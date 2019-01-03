@@ -1,0 +1,35 @@
+heat_template_version: 2015-10-15
+description: |
+  The root stack (containing a remote stack) for the deeply-nested remote
+  stack test.
+
+parameters:
+  name:
+    type: string
+    description: Name of the router
+    constraints:
+      - allowed_pattern: "[a-z][a-z0-9-]{1,}"
+  network_name:
+    type: string
+    description: The public network to connect to
+    constraints:
+      - custom_constraint: neutron.network
+  region:
+    type: string
+    description: The region in which to create the remote stack
+    default: RegionOne
+
+resources:
+  network_stack:
+    type: OS::Heat::Stack
+    properties:
+      template: {get_file: remote_nested_intermediate.yaml}
+      context:
+        region_name: {get_param: region}
+      parameters:
+        name: {get_param: name}
+        network_name: {get_param: network_name}
+
+outputs:
+  router:
+    value: {get_attr: [network_stack, outputs, router]}
