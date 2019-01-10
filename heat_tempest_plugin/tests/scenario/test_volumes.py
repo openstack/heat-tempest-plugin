@@ -17,11 +17,13 @@ import six
 from tempest.lib import decorators
 
 from heat_tempest_plugin.common import exceptions
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.scenario import scenario_base
 
 LOG = logging.getLogger(__name__)
 
 
+@test.requires_service_feature('volume', 'backup')
 class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
     """Class is responsible for testing of volume backup."""
 
