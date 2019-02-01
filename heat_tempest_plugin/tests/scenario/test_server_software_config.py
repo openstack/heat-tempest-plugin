@@ -27,14 +27,14 @@ echo "Output to stderr" 1>&2
 
 CFG3_PP = '''file {'barfile':
   ensure  => file,
-  mode    => 0644,
+  mode    => '0644',
   path    => "/tmp/$::bar",
   content => "$::foo",
 }
 file {'output_result':
   ensure  => file,
   path    => "$::heat_outputs_path.result",
-  mode    => 0644,
+  mode    => '0644',
   content => "The file /tmp/$::bar contains $::foo for server \
 $::deploy_server_id during $::deploy_action",
 }
@@ -153,8 +153,8 @@ class SoftwareConfigIntegrationTest(scenario_base.ScenarioTestsBase):
         }
 
         files = {
-            'cfg1.sh': CFG1_SH,
-            'cfg3.pp': CFG3_PP
+            'file:///cfg1.sh': CFG1_SH,
+            'file:///cfg3.pp': CFG3_PP
         }
 
         env_files, env = template_utils.process_environment_and_files(

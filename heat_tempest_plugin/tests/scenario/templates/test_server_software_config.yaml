@@ -52,7 +52,7 @@ resources:
       - name: bar
       outputs:
       - name: result
-      config: {get_file: cfg1.sh}
+      config: {get_file: /cfg1.sh}
 
   cfg2a:
     type: OS::Heat::StructuredConfig
@@ -87,7 +87,7 @@ resources:
       - name: bar
       outputs:
       - name: result
-      config: {get_file: cfg3.pp}
+      config: {get_file: /cfg3.pp}
 
   dep1:
     type: OS::Heat::SoftwareDeployment
