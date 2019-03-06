@@ -34,25 +34,26 @@ outputs:
     value: {get_resource: test1}
 '''
 
-    @decorators.idempotent_id('45449bad-18ba-4148-82e6-a6bc1e9a9b04')
-    def test_create_with_external_ref(self):
-        stack_name = self._stack_rand_name()
-        stack_identifier = self.stack_create(
-            stack_name=stack_name,
-            template=self.TEMPLATE_WITH_EX_REF,
+    def _stack_create(self, template):
+        self.stack_name = self._stack_rand_name()
+        self.stack_identifier = self.stack_create(
+            stack_name=self.stack_name,
+            template=template,
             files={},
             disable_rollback=True,
             parameters={},
-            environment={}
+            environment={},
+            expected_status='CREATE_COMPLETE'
         )
 
-        stack = self.client.stacks.get(stack_identifier)
-
-        self._wait_for_stack_status(stack_identifier, 'CREATE_COMPLETE')
         expected_resources = {'test1': 'OS::Heat::TestResource'}
         self.assertEqual(expected_resources,
-                         self.list_resources(stack_identifier))
-        stack = self.client.stacks.get(stack_identifier)
+                         self.list_resources(self.stack_identifier))
+
+    @decorators.idempotent_id('45449bad-18ba-4148-82e6-a6bc1e9a9b04')
+    def test_create_with_external_ref(self):
+        self._stack_create(self.TEMPLATE_WITH_EX_REF)
+        stack = self.client.stacks.get(self.stack_identifier)
         self.assertEqual(
             [{'description': 'No description given',
               'output_key': 'str',
@@ -60,28 +61,41 @@ outputs:
 
     @decorators.idempotent_id('fb16477c-e981-4ef9-a83b-c0acc162343a')
     def test_update_with_external_ref(self):
-        stack_name = self._stack_rand_name()
-        stack_identifier = self.stack_create(
-            stack_name=stack_name,
-            template=self.TEMPLATE,
-            files={},
-            disable_rollback=True,
-            parameters={},
-            environment={}
-        )
-        stack = self.client.stacks.get(stack_identifier)
+        self._stack_create(self.TEMPLATE)
 
-        self._wait_for_stack_status(stack_identifier, 'CREATE_COMPLETE')
-        expected_resources = {'test1': 'OS::Heat::TestResource'}
-        self.assertEqual(expected_resources,
-                         self.list_resources(stack_identifier))
-        stack = self.client.stacks.get(stack_identifier)
+        stack = self.client.stacks.get(self.stack_identifier)
         self.assertEqual([], stack.outputs)
 
-        stack_name = stack_identifier.split('/')[0]
-        kwargs = {'stack_id': stack_identifier, 'stack_name': stack_name,
+        stack_name = self.stack_identifier.split('/')[0]
+        kwargs = {'stack_id': self.stack_identifier, 'stack_name': stack_name,
                   'template': self.TEMPLATE_WITH_EX_REF, 'files': {},
                   'disable_rollback': True, 'parameters': {}, 'environment': {}
                   }
         self.client.stacks.update(**kwargs)
-        self._wait_for_stack_status(stack_identifier, 'UPDATE_FAILED')
+        self._wait_for_stack_status(self.stack_identifier, 'UPDATE_FAILED')
+
+    @decorators.idempotent_id('0ac301c2-b377-49b8-82e2-2458634bc8cf')
+    def test_update_stack_contain_external_ref(self):
+        self._stack_create(self.TEMPLATE_WITH_EX_REF)
+
+        stack = self.client.stacks.get(self.stack_identifier)
+        self.assertEqual(
+            [{'description': 'No description given',
+              'output_key': 'str',
+              'output_value': 'foobar'}], stack.outputs)
+
+        # Update Stack without change external_id
+
+        new_stack_name = self._stack_rand_name()
+        kwargs = {'stack_id': self.stack_identifier,
+                  'stack_name': new_stack_name,
+                  'template': self.TEMPLATE_WITH_EX_REF, 'files': {},
+                  'disable_rollback': True, 'parameters': {}, 'environment': {}
+                  }
+        self.client.stacks.update(**kwargs)
+
+        self._wait_for_stack_status(self.stack_identifier, 'UPDATE_COMPLETE')
+
+        expected_resources = {'test1': 'OS::Heat::TestResource'}
+        self.assertEqual(expected_resources,
+                         self.list_resources(self.stack_identifier))
