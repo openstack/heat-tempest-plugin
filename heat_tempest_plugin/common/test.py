@@ -132,19 +132,34 @@ def requires_service_type(service_type):
     return decorator
 
 
+def _check_require(group, feature, test_method):
+    features_group = getattr(config.CONF, group, None)
+    if not features_group:
+        return test_method
+    feature_enabled = features_group.get(feature, True)
+    skipper = testtools.skipUnless(feature_enabled,
+                                   "%s - Feature not enabled." % feature)
+    return skipper(test_method)
+
+
 def requires_feature(feature):
     '''Decorator for tests requring specific feature.
 
     The decorated test will be skipped when a specific feature is disabled.
     '''
     def decorator(test_method):
-        features_group = getattr(config.CONF, 'heat_features_enabled', None)
-        if not features_group:
-            return test_method
-        feature_enabled = config.CONF.heat_features_enabled.get(feature, False)
-        skipper = testtools.skipUnless(feature_enabled,
-                                       "%s - Feature not enabled." % feature)
-        return skipper(test_method)
+        return _check_require('heat_features_enabled', feature, test_method)
+    return decorator
+
+
+def requires_service_feature(service, feature):
+    '''Decorator for tests requring specific service feature enabled in tempest.
+
+    The decorated test will be skipped when a specific feature is disabled.
+    '''
+    def decorator(test_method):
+        group = service + '_feature_enabled'
+        return _check_require(group, feature, test_method)
     return decorator
 
 
