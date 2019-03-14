@@ -159,6 +159,9 @@ HeatGroup = [
     cfg.StrOpt('hidden_stack_tag',
                default='data-processing-cluster',
                help="Tag to be considered as hidden for stack tags tests"),
+    cfg.StrOpt('credential_secret_id',
+               help="Barbican secret id which storing cloud credential in "
+               "remote site."),
 ]
 
 heat_features_group = cfg.OptGroup(
@@ -168,7 +171,10 @@ heat_features_group = cfg.OptGroup(
 HeatFeaturesGroup = [
     cfg.BoolOpt('stack_cancel',
                 default=False,
-                help="If false, skip stack cancel tests")
+                help="If false, skip stack cancel tests"),
+    cfg.BoolOpt('multi_cloud',
+                default=False,
+                help="If false, skip multi-cloud tests for remote stack")
 ]
 
 
