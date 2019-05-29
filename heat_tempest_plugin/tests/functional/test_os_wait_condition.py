@@ -106,5 +106,5 @@ outputs:
         params = {'flavor': self.conf.minimal_instance_type,
                   'image': self.conf.minimal_image_ref,
                   'network': self.conf.fixed_network_name,
-                  'timeout': 120}
+                  'timeout': 180}
         self.stack_create(template=self.template, parameters=params)
