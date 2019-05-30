@@ -12,6 +12,7 @@ tests:
   request_headers:
     content-type: application/json
   data:
+    name: $ENVIRON['PREFIX']-config
     group: script
     config: '#!/bin/sh -x\necho hello'
   status: 200
