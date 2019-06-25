@@ -12,6 +12,12 @@
 
 from oslo_config import cfg
 
+import os
+
+default_template = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    'tests/scenario/templates/boot_config_none_env.yaml')
+
 service_available_group = cfg.OptGroup(name="service_available",
                                        title="Available OpenStack Services")
 
@@ -106,8 +112,7 @@ HeatGroup = [
                default='public',
                help="Visible floating network name "),
     cfg.StrOpt('boot_config_env',
-               default=('heat_tempest_plugin/tests/scenario/templates'
-                        '/boot_config_none_env.yaml'),
+               default=default_template,
                help="Path to environment file which defines the "
                     "resource type Heat::InstallConfigAgent. Needs to "
                     "be appropriate for the image_ref."),
