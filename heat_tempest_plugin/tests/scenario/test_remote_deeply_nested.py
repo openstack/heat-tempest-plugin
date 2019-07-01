@@ -22,7 +22,7 @@ class RemoteDeeplyNestedStackTest(scenario_base.ScenarioTestsBase):
     def test_remote_nested(self):
         parameters = {
             'name': 'remote-nested',
-            'network_name': 'public',
+            'network_name': self.conf.floating_network_name,
         }
 
         stack_id = self.launch_stack(
