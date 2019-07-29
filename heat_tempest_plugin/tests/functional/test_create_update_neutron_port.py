@@ -100,6 +100,5 @@ class UpdatePortTest(functional_base.FunctionalTestsBase):
         new_id, new_ip, new_mac = self.get_port_id_and_outputs(
             stack_identifier)
         # mac_address should be different
-        self.assertEqual(_id, new_id)
         self.assertEqual(_ip, new_ip)
         self.assertNotEqual(_mac, new_mac)
