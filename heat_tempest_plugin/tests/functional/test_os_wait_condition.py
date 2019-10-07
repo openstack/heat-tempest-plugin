@@ -45,31 +45,41 @@ resources:
         str_replace:
           template: '#!/bin/sh
 
-            wc_notify --data-binary ''{"status": "SUCCESS"}''
+            while true; do wc_notify --data-binary ''{"status":
+            "SUCCESS"}''; if [ $? -eq 0 ]; then break; else sleep 10; fi; done
 
             # signals with reason
 
-            wc_notify --data-binary ''{"status": "SUCCESS", "reason":
-            "signal2"}''
+            while true; do wc_notify --data-binary ''{"status":
+            "SUCCESS", "reason":
+            "signal2"}''; if [ $? -eq 0 ]; then break; else sleep 10; fi; done
 
             # signals with data
 
-            wc_notify --data-binary ''{"status": "SUCCESS", "reason":
-            "signal3", "data": "data3"}''
+            while true; do wc_notify --data-binary ''{"status":
+            "SUCCESS", "reason": "signal3", "data":
+            "data3"}''; if [ $? -eq 0 ]; then break; else sleep 10; fi; done
 
-            wc_notify --data-binary ''{"status": "SUCCESS", "reason":
-            "signal4", "data": "data4"}''
+            while true; do wc_notify --data-binary ''{"status":
+            "SUCCESS", "reason": "signal4", "data":
+            "data4"}''; if [ $? -eq 0 ]; then break; else sleep 10; fi; done
 
             # check signals with the same ID
 
-            wc_notify --data-binary ''{"status": "SUCCESS", "id": "test5"}''
+            while true; do wc_notify --data-binary ''{"status":
+            "SUCCESS", "id":
+            "test5"}''; if [ $? -eq 0 ]; then break; else sleep 10; fi; done
 
-            wc_notify --data-binary ''{"status": "SUCCESS", "id": "test5"}''
+            while true; do wc_notify --data-binary ''{"status":
+            "SUCCESS", "id":
+            "test5"}''; if [ $? -eq 0 ]; then break; else sleep 10; fi; done
+
+            _signal(){ while true; do wc_notify --data-binary ''{"status":
+            "SUCCESS"}''; if [ $? -eq 0 ]; then break; fi; done }
 
             # loop for 20 signals without reasons and data
 
-            for i in `seq 1 20`; do wc_notify --data-binary ''{"status":
-            "SUCCESS"}'' & done
+            for i in `seq 1 20`; do _signal & done
 
             wait
             '
