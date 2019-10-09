@@ -167,6 +167,11 @@ HeatGroup = [
     cfg.StrOpt('credential_secret_id',
                help="Barbican secret id which storing cloud credential in "
                "remote site."),
+    cfg.BoolOpt('vm_to_heat_api_insecure',
+                default=False,
+                help="Set this to True if VM images used for tests "
+                     "can not verify a (self-signed) SSL certificate "
+                     "of public Heat endpoint."),
 ]
 
 heat_features_group = cfg.OptGroup(

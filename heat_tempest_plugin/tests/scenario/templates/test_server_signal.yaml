@@ -26,6 +26,9 @@ parameters:
   user_data_format:
     type: string
     default: RAW
+  wc_extra_args:
+    type: string
+    default: ""
 resources:
   sg:
     type: OS::Neutron::SecurityGroup
@@ -86,7 +89,10 @@ resources:
             #!/bin/sh
             wc_notify --data-binary '{"status": "SUCCESS", "data": "test complete"}'
           params:
-            wc_notify: { get_attr: ['wait_handle', 'curl_cli'] }
+            wc_notify:
+              list_join:
+                - " "
+                - [ get_attr: ['wait_handle', 'curl_cli'], get_param: wc_extra_args ]
 
   server_floating_ip_assoc:
     type: OS::Neutron::FloatingIPAssociation

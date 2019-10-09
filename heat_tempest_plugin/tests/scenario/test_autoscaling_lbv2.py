@@ -73,6 +73,8 @@ class AutoscalingLoadBalancerv2Test(scenario_base.ScenarioTestsBase):
             'subnet': self.conf.fixed_subnet_name,
             'public_net': self.conf.floating_network_name
         }
+        if self.conf.vm_to_heat_api_insecure:
+            parameters['wc_extra_args'] = '--insecure'
 
         app_server_template = self._load_template(
             __file__, self.app_server_template_name, self.sub_dir

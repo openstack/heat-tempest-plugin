@@ -26,13 +26,20 @@ parameters:
   timeout:
     type: number
 
+  wc_extra_args:
+    type: string
+    default: ""
+
 resources:
 
   config:
     type: OS::Test::WebAppConfig
     properties:
       app_port: { get_param: app_port }
-      wc_curl_cli: { get_attr: [ handle, curl_cli ] }
+      wc_curl_cli:
+        list_join:
+          - " "
+          - [ get_attr: [ handle, curl_cli ], get_param: wc_extra_args ]
 
   server:
     type: OS::Nova::Server

@@ -13,6 +13,9 @@ Parameters:
     Type: String
   timeout:
     Type: Number
+  SignalExtraArgs:
+    Type: String
+    Default: ""
 Resources:
   CfnUser:
     Type: AWS::IAM::User
@@ -69,10 +72,11 @@ Resources:
       UserData:
         Fn::Replace:
         - WaitHandle: {Ref: WaitHandle}
+          SignalExtraArgs: {Ref: SignalExtraArgs}
         - |
           #!/bin/bash -v
           /usr/bin/cfn-init
-          /usr/bin/cfn-signal -e 0 --data "`cat /tmp/smoke-status`" \
+          /usr/bin/cfn-signal SignalExtraArgs -e 0 --data "`cat /tmp/smoke-status`" \
               --id smoke_status "WaitHandle"
   WaitHandle:
     Type: AWS::CloudFormation::WaitConditionHandle

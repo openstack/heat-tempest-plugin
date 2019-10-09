@@ -29,6 +29,9 @@ parameters:
   timeout:
     type: number
     default: 60
+  wc_extra_args:
+    type: string
+    default: ""
 resources:
   instance1:
     type: OS::Nova::Server
@@ -72,7 +75,10 @@ resources:
             '
           params:
             wc_notify:
-              get_attr: [wait_handle, curl_cli]
+              list_join:
+                - " "
+                - [ get_attr: [ wait_handle, curl_cli],
+                    get_param: wc_extra_args ]
 
   wait_condition:
     type: OS::Heat::WaitCondition
@@ -107,4 +113,6 @@ outputs:
                   'image': self.conf.minimal_image_ref,
                   'network': self.conf.fixed_network_name,
                   'timeout': 180}
+        if self.conf.vm_to_heat_api_insecure:
+            params['wc_extra_args'] = '--insecure'
         self.stack_create(template=self.template, parameters=params)

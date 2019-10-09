@@ -33,7 +33,8 @@ class ServerSignalIntegrationTest(scenario_base.ScenarioTestsBase):
             'timeout': self.conf.build_timeout,
             'user_data_format': user_data_format
         }
-
+        if self.conf.vm_to_heat_api_insecure:
+            parameters['wc_extra_args'] = '--insecure'
         # Launch stack
         sid = self.launch_stack(
             template_name="test_server_signal.yaml",

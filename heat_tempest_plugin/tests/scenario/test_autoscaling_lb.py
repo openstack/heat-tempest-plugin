@@ -74,6 +74,8 @@ class AutoscalingLoadBalancerTest(scenario_base.ScenarioTestsBase):
             'lb_port': 80,
             'timeout': 600
         }
+        if self.conf.vm_to_heat_api_insecure:
+            parameters['wc_extra_args'] = '--insecure'
 
         app_server_template = self._load_template(
             __file__, self.app_server_template_name, self.sub_dir
