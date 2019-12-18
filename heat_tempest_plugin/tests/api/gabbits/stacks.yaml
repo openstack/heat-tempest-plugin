@@ -38,7 +38,7 @@ tests:
   redirects: True
   poll:
     count: 10
-    delay: 1.0
+    delay: 2.0
   response_json_paths:
     $.stack.stack_status: CREATE_COMPLETE
 
@@ -88,7 +88,7 @@ tests:
   redirects: True
   poll:
     count: 10
-    delay: 1.0
+    delay: 2.0
   response_json_paths:
     $.stack.stack_status: CREATE_COMPLETE
 
@@ -132,7 +132,7 @@ tests:
   redirects: True
   poll:
     count: 10
-    delay: 1.0
+    delay: 2.0
   response_json_paths:
     $.stack.stack_status: UPDATE_COMPLETE
 
@@ -152,7 +152,7 @@ tests:
   redirects: True
   poll:
     count: 10
-    delay: 1.0
+    delay: 2.0
   response_json_paths:
     $.stack.stack_status: UPDATE_COMPLETE
 
