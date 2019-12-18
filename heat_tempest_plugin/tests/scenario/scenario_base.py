@@ -51,11 +51,6 @@ class ScenarioTestsBase(test.HeatIntegrationTest):
         template = self._load_template(__file__, template_name, self.sub_dir,
                                        files)
 
-        parameters = parameters or {}
-
-        if kwargs.get('add_parameters'):
-            parameters.update(kwargs['add_parameters'])
-
         stack_id = self.stack_create(
             stack_name=kwargs.get('stack_name'),
             template=template,

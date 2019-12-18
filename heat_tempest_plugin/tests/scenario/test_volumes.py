@@ -12,6 +12,7 @@
 
 
 from cinderclient import exceptions as cinder_exceptions
+import copy
 from oslo_log import log as logging
 import six
 from tempest.lib import decorators
@@ -38,8 +39,7 @@ class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
         self.assertIsNotNone(volume)
         self.assertEqual(expected_status, volume.status)
         self.assertEqual(self.volume_size, volume.size)
-        self.assertEqual(self.volume_description,
-                         volume.display_description)
+        self.assertEqual(self.volume_description, volume.description)
 
     def _outputs_verify(self, stack, expected_status='available'):
         self.assertEqual(expected_status,
@@ -49,7 +49,7 @@ class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
         self.assertEqual(self.volume_description,
                          self._stack_output(stack, 'display_description'))
 
-    def check_stack(self, stack_id, parameters):
+    def check_stack(self, stack_id, default_parameters):
         stack = self.client.stacks.get(stack_id)
 
         # Verify with cinder that the volume exists, with matching details
@@ -73,13 +73,14 @@ class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
         backup = backups_filtered[0]
         self.addCleanup(self.volume_client.backups.delete, backup.id)
 
+        parameters = copy.deepcopy(default_parameters)
+        parameters.update({'backup_id': backup.id})
         # Now, we create another stack where the volume is created from the
         # backup created by the previous stack
         try:
             stack_identifier2 = self.launch_stack(
                 template_name='test_volumes_create_from_backup.yaml',
-                parameters=parameters,
-                add_parameters={'backup_id': backup.id})
+                parameters=parameters)
             stack2 = self.client.stacks.get(stack_identifier2)
         except exceptions.StackBuildErrorException:
             LOG.exception("Halting test due to bug: #1382300")
@@ -113,7 +114,7 @@ class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
            4. Create a new stack, where the volume is created from the backup
            5. Verify the test data written in (1) is present in the new volume
         """
-        parameters = {
+        default_parameters = {
             'key_name': self.keypair_name,
             'instance_type': self.conf.minimal_instance_type,
             'image_id': self.conf.minimal_image_ref,
@@ -122,13 +123,15 @@ class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
             'network': self.net['id']
         }
         if self.conf.vm_to_heat_api_insecure:
-            parameters['wc_extra_args'] = '--insecure'
+            default_parameters['wc_extra_args'] = '--insecure'
+
+        parameters = copy.deepcopy(default_parameters)
+        parameters.update({'volume_size': self.volume_size})
         # Launch stack
         stack_id = self.launch_stack(
             template_name='test_volumes_delete_snapshot.yaml',
-            parameters=parameters,
-            add_parameters={'volume_size': self.volume_size}
+            parameters=parameters
         )
 
         # Check stack
-        self.check_stack(stack_id, parameters)
+        self.check_stack(stack_id, default_parameters)
