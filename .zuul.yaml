@@ -2,32 +2,89 @@
     name: heat-functional-convg-queens
     parent: heat-functional-convg-mysql-lbaasv2
     override-checkout: stable/queens
+    vars:
+      branch_override: stable/queens
+    nodeset:
+      nodes:
+        - name: primary
+          label: ubuntu-xenial
 
 - job:
     name: heat-functional-orig-queens
     parent: heat-functional-orig-mysql-lbaasv2
     override-checkout: stable/queens
-
-- job:
-    name: heat-functional-convg-queens-py35
-    parent: heat-functional-convg-mysql-lbaasv2-py35
-    override-checkout: stable/queens
+    vars:
+      branch_override: stable/queens
+    nodeset:
+      nodes:
+        - name: primary
+          label: ubuntu-xenial
 
 - job:
     name: heat-functional-convg-rocky
     parent: heat-functional-convg-mysql-lbaasv2
     override-checkout: stable/rocky
+    vars:
+      branch_override: stable/rocky
+    nodeset:
+      nodes:
+        - name: primary
+          label: ubuntu-xenial
 
 - job:
     name: heat-functional-orig-rocky
     parent: heat-functional-orig-mysql-lbaasv2
     override-checkout: stable/rocky
+    vars:
+      branch_override: stable/rocky
+    nodeset:
+      nodes:
+        - name: primary
+          label: ubuntu-xenial
 
 - job:
-    name: heat-functional-convg-rocky-py35
-    parent: heat-functional-convg-mysql-lbaasv2-py35
-    override-checkout: stable/rocky
+    name: heat-functional-convg-stein
+    parent: heat-functional-convg-mysql-lbaasv2
+    override-checkout: stable/stein
+    vars:
+      branch_override: stable/stein
+    nodeset:
+      nodes:
+        - name: primary
+          label: ubuntu-xenial
 
+- job:
+    name: heat-functional-orig-stein
+    parent: heat-functional-orig-mysql-lbaasv2
+    override-checkout: stable/stein
+    vars:
+      branch_override: stable/stein
+    nodeset:
+      nodes:
+        - name: primary
+          label: ubuntu-xenial
+
+- job:
+    name: heat-functional-convg-train
+    parent: heat-functional-convg-mysql-lbaasv2
+    override-checkout: stable/train
+    vars:
+      branch_override: stable/train
+    nodeset:
+      nodes:
+        - name: primary
+          label: ubuntu-xenial
+
+- job:
+    name: heat-functional-orig-train
+    parent: heat-functional-orig-mysql-lbaasv2
+    override-checkout: stable/train
+    vars:
+      branch_override: stable/train
+    nodeset:
+      nodes:
+        - name: primary
+          label: ubuntu-xenial
 
 - project:
     templates:
@@ -35,19 +92,19 @@
       - tempest-plugin-jobs
     check:
       jobs:
-        - heat-functional-orig-mysql-lbaasv2
-        - heat-functional-convg-mysql-lbaasv2
-        - heat-functional-convg-mysql-lbaasv2-non-apache
-        - heat-functional-convg-mysql-lbaasv2-py35
+        - heat-functional
+        - heat-functional-non-apache
+        - heat-functional-legacy
         - heat-functional-convg-queens
-        - heat-functional-convg-queens-py35
         - heat-functional-orig-queens
         - heat-functional-convg-rocky
-        - heat-functional-convg-rocky-py35
         - heat-functional-orig-rocky
+        - heat-functional-convg-stein
+        - heat-functional-orig-stein
+        - heat-functional-convg-train
+        - heat-functional-orig-train
     gate:
       queue: heat
       jobs:
-        - heat-functional-orig-mysql-lbaasv2
-        - heat-functional-convg-mysql-lbaasv2
-        - heat-functional-convg-mysql-lbaasv2-py35
+        - heat-functional
+        - heat-functional-legacy
