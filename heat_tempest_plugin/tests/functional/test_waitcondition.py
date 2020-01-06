@@ -54,7 +54,9 @@ outputs:
             auth_url=signal['auth_url'],
             user_id=signal['user_id'],
             password=signal['password'],
-            project_id=signal['project_id'])
+            project_id=signal['project_id'],
+            insecure=self.conf.disable_ssl_certificate_validation,
+            cacert=self.conf.ca_file)
         endpoint = ks.service_catalog.url_for(
             service_type='messaging', endpoint_type=self.conf.endpoint_type)
         conf = {
