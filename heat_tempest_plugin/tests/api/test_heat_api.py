@@ -92,8 +92,10 @@ def load_tests(loader, tests, pattern):
             else:
                 register_test_case_id(test_case)
 
+    cert_validate = not conf.disable_ssl_certificate_validation,
     api_tests = driver.build_tests(test_dir, loader, url=endpoint, host="",
                                    fixture_module=fixtures,
+                                   cert_validate=cert_validate,
                                    test_loader_name=__name__)
     register_test_suite_ids(api_tests)
     return api_tests
