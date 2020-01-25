@@ -1,6 +1,6 @@
 - job:
     name: heat-functional-convg-queens
-    parent: heat-functional-convg-mysql-lbaasv2
+    parent: heat-functional-convg-mysql-lbaasv2-py3
     nodeset: legacy-ubuntu-xenial
     override-checkout: stable/queens
     vars:
@@ -13,10 +13,11 @@
     nodeset: legacy-ubuntu-xenial
     vars:
       branch_override: stable/queens
+      use_python3: 1
 
 - job:
     name: heat-functional-convg-rocky
-    parent: heat-functional-convg-mysql-lbaasv2
+    parent: heat-functional-convg-mysql-lbaasv2-py3
     override-checkout: stable/rocky
     nodeset: legacy-ubuntu-xenial
     vars:
@@ -29,10 +30,11 @@
     nodeset: legacy-ubuntu-xenial
     vars:
       branch_override: stable/rocky
+      use_python3: 1
 
 - job:
     name: heat-functional-convg-stein
-    parent: heat-functional-convg-mysql-lbaasv2
+    parent: heat-functional-convg-mysql-lbaasv2-py3
     override-checkout: stable/stein
     nodeset: legacy-ubuntu-xenial
     vars:
@@ -45,10 +47,11 @@
     nodeset: legacy-ubuntu-xenial
     vars:
       branch_override: stable/stein
+      use_python3: 1
 
 - job:
     name: heat-functional-convg-train
-    parent: heat-functional-convg-mysql-lbaasv2
+    parent: heat-functional-convg-mysql-lbaasv2-py3
     override-checkout: stable/train
     nodeset: legacy-ubuntu-xenial
     vars:
@@ -61,6 +64,7 @@
     nodeset: legacy-ubuntu-xenial
     vars:
       branch_override: stable/train
+      use_python3: 1
 
 - project:
     templates:
