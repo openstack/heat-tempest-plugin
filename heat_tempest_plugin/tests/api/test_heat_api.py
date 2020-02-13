@@ -13,13 +13,14 @@
 
 """A test module to exercise the Heat API with gabbi.  """
 
-import keystoneauth1
 import os
 import sys
 import unittest
 
 from gabbi import driver
+import keystoneauth1
 from oslo_log import log as logging
+import six
 from tempest import config
 
 from heat_tempest_plugin.common import test
@@ -93,9 +94,20 @@ def load_tests(loader, tests, pattern):
                 register_test_case_id(test_case)
 
     cert_validate = not conf.disable_ssl_certificate_validation,
-    api_tests = driver.build_tests(test_dir, loader, url=endpoint, host="",
-                                   fixture_module=fixtures,
-                                   cert_validate=cert_validate,
-                                   test_loader_name=__name__)
+    try:
+        api_tests = driver.build_tests(test_dir, loader, url=endpoint, host="",
+                                       fixture_module=fixtures,
+                                       cert_validate=cert_validate,
+                                       test_loader_name=__name__)
+    except TypeError as ex:
+        err_msg = "got an unexpected keyword argument 'cert_validate'"
+        if err_msg in six.text_type(ex):
+            api_tests = driver.build_tests(test_dir, loader,
+                                           url=endpoint, host="",
+                                           fixture_module=fixtures,
+                                           test_loader_name=__name__)
+        else:
+            raise
+
     register_test_suite_ids(api_tests)
     return api_tests
