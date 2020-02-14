@@ -71,12 +71,10 @@
         - heat-functional
         - heat-functional-non-apache
         - heat-functional-legacy
-        # block untill https://review.opendev.org/#/q/topic:fix-stable-gate+(
-        # status:open+OR+status:merged)+project:openstack/heat merged
-        #- heat-functional-convg-queens
-        #- heat-functional-orig-queens
-        #- heat-functional-convg-rocky
-        #- heat-functional-orig-rocky
+        - heat-functional-convg-queens
+        - heat-functional-orig-queens
+        - heat-functional-convg-rocky
+        - heat-functional-orig-rocky
         - heat-functional-convg-stein
         - heat-functional-orig-stein
         - heat-functional-convg-train
