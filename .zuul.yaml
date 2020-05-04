@@ -36,7 +36,6 @@
     name: heat-functional-convg-stein
     parent: heat-functional-convg-mysql-lbaasv2-py3
     override-checkout: stable/stein
-    nodeset: legacy-ubuntu-xenial
     vars:
       branch_override: stable/stein
 
@@ -44,7 +43,6 @@
     name: heat-functional-orig-stein
     parent: heat-functional-orig-mysql-lbaasv2
     override-checkout: stable/stein
-    nodeset: legacy-ubuntu-xenial
     vars:
       branch_override: stable/stein
       use_python3: 1
@@ -53,7 +51,6 @@
     name: heat-functional-convg-train
     parent: heat-functional-convg-mysql-lbaasv2-py3
     override-checkout: stable/train
-    nodeset: legacy-ubuntu-xenial
     vars:
       branch_override: stable/train
 
@@ -61,7 +58,6 @@
     name: heat-functional-orig-train
     parent: heat-functional-orig-mysql-lbaasv2
     override-checkout: stable/train
-    nodeset: legacy-ubuntu-xenial
     vars:
       branch_override: stable/train
       use_python3: 1
