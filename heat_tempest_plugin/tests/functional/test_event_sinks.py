@@ -51,7 +51,9 @@ resources:
                     'os_user_domain_id': self.conf.user_domain_id,
                     'os_project_domain_id': self.conf.project_domain_id,
                     'os_user_domain_name': self.conf.user_domain_name,
-                    'os_project_domain_name': self.conf.project_domain_name
+                    'os_project_domain_name': self.conf.project_domain_name,
+                    'insecure': self.conf.disable_ssl_certificate_validation,
+                    'cacert': self.conf.ca_file
                 }
             }
         }
