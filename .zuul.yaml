@@ -28,6 +28,11 @@
       branch_override: stable/train
       use_python3: 1
 
+- job:
+    name: heat-functional-ussuri
+    parent: heat-functional
+    override-checkout: stable/ussuri
+
 - project:
     templates:
       - check-requirements
@@ -41,6 +46,7 @@
         - heat-functional-orig-stein
         - heat-functional-convg-train
         - heat-functional-orig-train
+        - heat-functional-ussuri
     gate:
       queue: heat
       jobs:
