@@ -67,7 +67,7 @@ resources:
 
         # Ensure property tag is not populated
         empty_tags_stack = self.client.stacks.get(stack_identifier)
-        self.assertIsNone(empty_tags_stack.tags)
+        self.assertFalse(empty_tags_stack.tags)
 
     @decorators.idempotent_id('5ed79584-0684-4f9c-ae8e-44a8f874ec79')
     def test_hidden_stack(self):
