@@ -93,7 +93,7 @@ def load_tests(loader, tests, pattern):
             else:
                 register_test_case_id(test_case)
 
-    cert_validate = not conf.disable_ssl_certificate_validation,
+    cert_validate = not conf.disable_ssl_certificate_validation
     try:
         api_tests = driver.build_tests(test_dir, loader, url=endpoint, host="",
                                        fixture_module=fixtures,
