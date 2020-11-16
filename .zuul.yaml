@@ -38,6 +38,12 @@
     nodeset: openstack-single-node-bionic
     override-checkout: stable/ussuri
 
+- job:
+    name: heat-functional-victoria
+    parent: heat-functional
+    nodeset: openstack-single-node-bionic
+    override-checkout: stable/victoria
+
 - project:
     templates:
       - check-requirements
@@ -45,13 +51,11 @@
     check:
       jobs:
         - heat-functional
-        - heat-functional-non-apache
         - heat-functional-legacy
-        - heat-functional-convg-stein
-        - heat-functional-orig-stein
         - heat-functional-convg-train
         - heat-functional-orig-train
         - heat-functional-ussuri
+        - heat-functional-victoria
     gate:
       queue: heat
       jobs:
