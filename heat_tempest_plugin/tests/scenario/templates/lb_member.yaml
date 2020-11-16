@@ -35,8 +35,16 @@ resources:
             #! /bin/sh -v
             Body=$(hostname)
             Response="HTTP/1.1 200 OK\r\nContent-Length: ${#Body}\r\n\r\n$Body"
-            wc_notify --data-binary '{"status": "SUCCESS"}'
-            while true ; do echo -e $Response | nc -llp PORT; done
+            while true; do
+                wc_notify --data-binary '{"status": "SUCCESS"}'
+                if [ $? -eq 0 ]; then
+                    break
+                fi
+                sleep 10
+            done
+            while true ; do
+                echo -e $Response | nc -llp PORT
+            done
           params:
             PORT: {get_param: app_port}
             wc_notify: { get_attr: [handle, curl_cli]}

@@ -87,7 +87,13 @@ resources:
         str_replace:
           template: |
             #!/bin/sh
-            wc_notify --data-binary '{"status": "SUCCESS", "data": "test complete"}'
+            while true; do
+                wc_notify --data-binary '{"status": "SUCCESS", "data": "test complete"}'
+                if [ $? -eq 0 ]; then
+                    break
+                fi
+                sleep 10
+            done
           params:
             wc_notify:
               list_join:
