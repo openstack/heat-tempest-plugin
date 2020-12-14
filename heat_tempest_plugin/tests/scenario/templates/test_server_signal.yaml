@@ -108,6 +108,7 @@ resources:
 
   wait_condition:
     type: OS::Heat::WaitCondition
+    depends_on: server
     properties:
       handle: {get_resource: wait_handle}
       timeout: {get_param: timeout}

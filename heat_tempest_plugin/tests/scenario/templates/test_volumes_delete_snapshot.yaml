@@ -107,6 +107,7 @@ resources:
 
   wait_condition:
     type: AWS::CloudFormation::WaitCondition
+    depends_on: instance
     properties:
       Count: 1
       Handle: { get_resource: wait_handle }
