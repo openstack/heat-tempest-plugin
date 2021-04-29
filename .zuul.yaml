@@ -41,8 +41,12 @@
 - job:
     name: heat-functional-victoria
     parent: heat-functional
-    nodeset: openstack-single-node-bionic
     override-checkout: stable/victoria
+
+- job:
+    name: heat-functional-wallaby
+    parent: heat-functional
+    override-checkout: stable/wallaby
 
 - project:
     templates:
@@ -56,6 +60,7 @@
         - heat-functional-orig-train
         - heat-functional-ussuri
         - heat-functional-victoria
+        - heat-functional-wallaby
     gate:
       queue: heat
       jobs:
