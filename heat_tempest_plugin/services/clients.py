@@ -62,7 +62,7 @@ class ClientManager(object):
     calling various OpenStack APIs.
     """
 
-    CINDERCLIENT_VERSION = '2'
+    CINDERCLIENT_VERSION = '3'
     HEATCLIENT_VERSION = '1'
     NOVA_API_VERSION = '2.1'
     GNOCCHI_VERSION = '1'
