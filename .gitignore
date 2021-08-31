@@ -1,5 +1,22 @@
 *.pyc
+
+# Packages
+*.egg*
+dist
+build
+
+# Unit test
+.tox/
+.stestr/
+.venv
+
+# pbr generates these
+AUTHORS
+ChangeLog
+
+# Editors
 *.swp
 *~
-.tox
-.testrepository
+
+# Files created by releasenotes build
+releasenotes/build
