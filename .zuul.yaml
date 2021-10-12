@@ -54,24 +54,15 @@
       - tempest-plugin-jobs
     check:
       jobs:
-        - heat-functional:
-            voting: false
-        - heat-functional-legacy:
-            voting: false
-        - heat-functional-convg-train:
-            voting: false
-        - heat-functional-orig-train:
-            voting: false
-        - heat-functional-ussuri:
-            voting: false
-        - heat-functional-victoria:
-            voting: false
-        - heat-functional-wallaby:
-            voting: false
+        - heat-functional
+        - heat-functional-legacy
+        - heat-functional-convg-train
+        - heat-functional-orig-train
+        - heat-functional-ussuri
+        - heat-functional-victoria
+        - heat-functional-wallaby
     gate:
       queue: heat
       jobs:
-        - heat-functional:
-            voting: false
-        - heat-functional-legacy:
-            voting: false
+        - heat-functional
+        - heat-functional-legacy
