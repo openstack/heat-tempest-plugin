@@ -15,9 +15,9 @@ import select
 import socket
 import time
 
+import io
 from oslo_log import log as logging
 import paramiko
-import six
 
 from heat_tempest_plugin.common import exceptions
 
@@ -31,9 +31,9 @@ class Client(object):
         self.host = host
         self.username = username
         self.password = password
-        if isinstance(pkey, six.string_types):
+        if isinstance(pkey, str):
             pkey = paramiko.RSAKey.from_private_key(
-                six.moves.cStringIO(str(pkey)))
+                io.cStringIO(str(pkey)))
         self.pkey = pkey
         self.look_for_keys = look_for_keys
         self.key_filename = key_filename
@@ -151,7 +151,7 @@ class RemoteClient(object):
         network = self.conf.network_for_ssh
         ip_version = self.conf.ip_version_for_ssh
         ssh_channel_timeout = self.conf.ssh_channel_timeout
-        if isinstance(server, six.string_types):
+        if isinstance(server, str):
             ip_address = server
         else:
             addresses = server['addresses'][network]

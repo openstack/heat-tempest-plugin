@@ -11,8 +11,6 @@
 #    under the License.
 
 
-import six
-
 from heatclient import exc
 from tempest.lib import decorators
 
@@ -169,7 +167,7 @@ resources:
         ex = self.assertRaises(exc.HTTPBadRequest,
                                self.client.stacks.validate,
                                template=fail_template)
-        self.assertIn('The template version is invalid', six.text_type(ex))
+        self.assertIn('The template version is invalid', str(ex))
 
     @decorators.idempotent_id('6a6472d2-71fa-4ebe-a2b6-20878838555b')
     def test_template_validate_parameter_groups(self):
