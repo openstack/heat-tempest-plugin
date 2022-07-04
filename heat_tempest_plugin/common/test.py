@@ -170,6 +170,9 @@ class HeatIntegrationTest(testtools.testcase.WithAttributes,
     def setUp(self):
         super(HeatIntegrationTest, self).setUp()
 
+        if not config.CONF.service_available.heat:
+            raise self.skipException("Heat is not available")
+
         self.conf = config.CONF.heat_plugin
 
         self.assertIsNotNone(self.conf.auth_url,

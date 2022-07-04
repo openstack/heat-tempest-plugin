@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    The ``[service_available] heat`` parameter now takes effect and disables
+    all tests when it is set to ``False``.
