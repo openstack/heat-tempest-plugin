@@ -8,7 +8,7 @@ parameters:
   key_name:
     type: string
     default: key-01
-    description: Name of an existing key pair to use for the server
+    description: Name of the key pair to use for the server
   flavor:
     type: string
     description: Flavor for the server to be created
@@ -75,6 +75,7 @@ resources:
     type: OS::Nova::KeyPair
     properties:
       name: { get_param: key_name }
+      public_key: { get_file: id_ed25519.pub }
 
   server:
     type: OS::Nova::Server

@@ -54,8 +54,10 @@
       - tempest-plugin-jobs
     check:
       jobs:
-        - heat-functional
-        - heat-functional-legacy
+        - heat-functional:
+            voting: false
+        - heat-functional-legacy:
+            voting: false
         - heat-functional-convg-train
         - heat-functional-orig-train
         - heat-functional-ussuri
@@ -64,5 +66,7 @@
     gate:
       queue: heat
       jobs:
-        - heat-functional
-        - heat-functional-legacy
+        - heat-functional:
+            voting: false
+        - heat-functional-legacy:
+            voting: false
