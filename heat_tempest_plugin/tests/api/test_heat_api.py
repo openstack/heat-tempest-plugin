@@ -63,8 +63,8 @@ def load_tests(loader, tests, pattern):
                 keystoneauth1.exceptions.discovery.DiscoveryFailure,
                 keystoneauth1.exceptions.connection.UnknownConnectionError,
                 keystoneauth1.exceptions.connection.ConnectFailure):
-            LOG.warn("Keystone auth exception: %s: %s" % (sys.exc_info()[0],
-                                                          sys.exc_info()[1]))
+            LOG.warning("Keystone auth exception: %s: %s" %
+                        (sys.exc_info()[0], sys.exc_info()[1]))
             # Clear the auth_url, as there is no point in tempest trying
             # to authenticate later with mis-configured or unreachable endpoint
             conf.auth_url = None
