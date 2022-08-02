@@ -1,47 +1,12 @@
 - job:
-    name: heat-functional-convg-stein
-    parent: heat-functional-convg-mysql-lbaasv2-py3
-    nodeset: openstack-single-node-bionic
-    override-checkout: stable/stein
-    vars:
-      branch_override: stable/stein
-
-- job:
-    name: heat-functional-orig-stein
-    parent: heat-functional-orig-mysql-lbaasv2
-    nodeset: openstack-single-node-bionic
-    override-checkout: stable/stein
-    vars:
-      branch_override: stable/stein
-      use_python3: 1
-
-- job:
-    name: heat-functional-convg-train
-    parent: heat-functional-convg-mysql-lbaasv2-py3
-    nodeset: openstack-single-node-bionic
-    override-checkout: stable/train
-    vars:
-      branch_override: stable/train
-
-- job:
-    name: heat-functional-orig-train
-    parent: heat-functional-orig-mysql-lbaasv2
-    nodeset: openstack-single-node-bionic
-    override-checkout: stable/train
-    vars:
-      branch_override: stable/train
-      use_python3: 1
-
-- job:
-    name: heat-functional-ussuri
+    name: heat-functional-yoga
     parent: heat-functional
-    nodeset: openstack-single-node-bionic
-    override-checkout: stable/ussuri
+    override-checkout: stable/yoga
 
 - job:
-    name: heat-functional-victoria
+    name: heat-functional-xena
     parent: heat-functional
-    override-checkout: stable/victoria
+    override-checkout: stable/xena
 
 - job:
     name: heat-functional-wallaby
@@ -57,10 +22,8 @@
       jobs:
         - heat-functional
         - heat-functional-legacy
-        - heat-functional-convg-train
-        - heat-functional-orig-train
-        - heat-functional-ussuri
-        - heat-functional-victoria
+        - heat-functional-yoga
+        - heat-functional-xena
         - heat-functional-wallaby
     gate:
       jobs:
