@@ -17,6 +17,7 @@ from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.scenario import scenario_base
 
 
+@test.requires_service('cinder')
 class BasicResourcesTest(scenario_base.ScenarioTestsBase):
 
     def setUp(self):
