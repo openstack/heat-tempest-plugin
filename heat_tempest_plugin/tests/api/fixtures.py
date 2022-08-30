@@ -16,10 +16,14 @@ import os
 from gabbi import fixture
 from heat_tempest_plugin.services import clients
 from tempest import config
+import unittest.case
 
 
 class AuthenticationFixture(fixture.GabbiFixture):
     def start_fixture(self):
+        if not config.CONF.service_available.heat:
+            raise unittest.case.SkipTest("Heat is not available")
+
         conf = config.CONF.heat_plugin
         manager = clients.ClientManager(conf)
         os.environ['OS_TOKEN'] = manager.identity_client.auth_token
