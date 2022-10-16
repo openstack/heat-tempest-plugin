@@ -1,16 +1,19 @@
 - job:
     name: heat-functional-yoga
     parent: heat-functional
+    nodeset: openstack-single-node-focal
     override-checkout: stable/yoga
 
 - job:
     name: heat-functional-xena
     parent: heat-functional
+    nodeset: openstack-single-node-focal
     override-checkout: stable/xena
 
 - job:
     name: heat-functional-wallaby
     parent: heat-functional
+    nodeset: openstack-single-node-focal
     override-checkout: stable/wallaby
 
 - project:
