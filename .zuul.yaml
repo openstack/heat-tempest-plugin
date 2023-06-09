@@ -1,4 +1,10 @@
 - job:
+    name: heat-functional-2023-1
+    parent: heat-functional
+    nodeset: openstack-single-node-jammy
+    override-checkout: stable/2023.1
+
+- job:
     name: heat-functional-zed
     parent: heat-functional
     nodeset: openstack-single-node-focal
@@ -10,18 +16,6 @@
     nodeset: openstack-single-node-focal
     override-checkout: stable/yoga
 
-- job:
-    name: heat-functional-xena
-    parent: heat-functional
-    nodeset: openstack-single-node-focal
-    override-checkout: stable/xena
-
-- job:
-    name: heat-functional-wallaby
-    parent: heat-functional
-    nodeset: openstack-single-node-focal
-    override-checkout: stable/wallaby
-
 - project:
     queue: heat
     templates:
@@ -31,10 +25,9 @@
       jobs:
         - heat-functional
         - heat-functional-legacy
+        - heat-functional-2023-1
         - heat-functional-zed
         - heat-functional-yoga
-        - heat-functional-xena
-        - heat-functional-wallaby
     gate:
       jobs:
         - heat-functional
