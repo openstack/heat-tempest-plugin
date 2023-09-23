@@ -81,6 +81,10 @@ class ServerSignalIntegrationTest(scenario_base.ScenarioTestsBase):
 
     @decorators.idempotent_id('8da0f6cc-60e6-4298-9e54-e1f905c5552a')
     def test_server_signal_userdata_format_raw(self):
+        if not self.conf.minimal_image_ref:
+            raise self.skipException("No minimal image configured to test")
+        if not self.conf.minimal_instance_type:
+            raise self.skipException("No minimal flavor configured to test")
         self._test_server_signal(image=self.conf.minimal_image_ref,
                                  flavor=self.conf.minimal_instance_type)
 
@@ -88,6 +92,8 @@ class ServerSignalIntegrationTest(scenario_base.ScenarioTestsBase):
     def test_server_signal_userdata_format_software_config(self):
         if not self.conf.image_ref:
             raise self.skipException("No image configured to test")
+        if not self.conf.instance_type:
+            raise self.skipException("No flavor configured to test")
         self._test_server_signal(user_data_format='SOFTWARE_CONFIG',
                                  image=self.conf.image_ref,
                                  flavor=self.conf.instance_type)

@@ -23,6 +23,10 @@ class LoadBalancerTest(scenario_base.ScenarioTestsBase):
         self.template_name = 'octavia_lbaas.yaml'
         self.member_template_name = 'lb_member.yaml'
         self.sub_dir = 'templates'
+        if not self.conf.minimal_image_ref:
+            raise self.skipException("No minimal image configured to test")
+        if not self.conf.minimal_instance_type:
+            raise self.skipException("No minimal flavor configured to test")
 
     def _create_stack(self):
         self.parameters = {
