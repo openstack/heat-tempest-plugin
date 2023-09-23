@@ -21,10 +21,10 @@ class BasicResourcesTest(scenario_base.ScenarioTestsBase):
 
     def setUp(self):
         super(BasicResourcesTest, self).setUp()
-        if not self.conf.image_ref:
-            raise self.skipException("No image configured to test")
-        if not self.conf.instance_type:
-            raise self.skipException("No flavor configured to test")
+        if not self.conf.minimal_image_ref:
+            raise self.skipException("No minimal image configured to test")
+        if not self.conf.minimal_instance_type:
+            raise self.skipException("No minimal flavor configured to test")
 
     def check_stack(self):
         sid = self.stack_identifier
@@ -55,8 +55,8 @@ class BasicResourcesTest(scenario_base.ScenarioTestsBase):
         self.private_net_name = test.rand_name('heat-net')
         parameters = {
             'key_name': test.rand_name('heat-key'),
-            'flavor': self.conf.instance_type,
-            'image': self.conf.image_ref,
+            'flavor': self.conf.minimal_instance_type,
+            'image': self.conf.minimal_image_ref,
             'vol_size': self.conf.volume_size,
             'private_net_name': self.private_net_name
         }
