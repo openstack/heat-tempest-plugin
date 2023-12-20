@@ -21,10 +21,9 @@ from keystoneauth1 import exceptions as kc_exceptions
 from neutronclient.common import exceptions as network_exceptions
 from oslo_log import log as logging
 from oslo_utils import timeutils
-import six
-from six.moves import urllib
 import testscenarios
 import testtools
+import urllib
 
 from heat_tempest_plugin.common import exceptions
 from heat_tempest_plugin.common import remote_client
@@ -67,7 +66,7 @@ def isotime(at):
 
 
 def rand_name(name=''):
-    randbits = six.text_type(random.randint(1, 0x7fffffff))
+    randbits = str(random.randint(1, 0x7fffffff))
     if name:
         return name + '-' + randbits
     else:
@@ -204,7 +203,7 @@ class HeatIntegrationTest(testtools.testcase.WithAttributes,
         self.setup_clients(self.conf, True)
 
     def get_remote_client(self, server_or_ip, username, private_key=None):
-        if isinstance(server_or_ip, six.string_types):
+        if isinstance(server_or_ip, str):
             ip = server_or_ip
         else:
             network_name_for_ssh = self.conf.network_for_ssh

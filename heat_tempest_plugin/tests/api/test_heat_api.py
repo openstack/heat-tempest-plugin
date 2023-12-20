@@ -20,7 +20,6 @@ import unittest
 from gabbi import driver
 import keystoneauth1
 from oslo_log import log as logging
-import six
 from tempest import config
 
 from heat_tempest_plugin.common import test
@@ -101,7 +100,7 @@ def load_tests(loader, tests, pattern):
                                        test_loader_name=__name__)
     except TypeError as ex:
         err_msg = "got an unexpected keyword argument 'cert_validate'"
-        if err_msg in six.text_type(ex):
+        if err_msg in str(ex):
             api_tests = driver.build_tests(test_dir, loader,
                                            url=endpoint, host="",
                                            fixture_module=fixtures,

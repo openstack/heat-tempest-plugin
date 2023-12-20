@@ -10,7 +10,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import six
 import uuid
 
 from heat_tempest_plugin.tests.scenario import scenario_base
@@ -33,7 +32,7 @@ class RemoteDeeplyNestedStackTest(scenario_base.ScenarioTestsBase):
 
         stack = self.client.stacks.get(stack_id)
         router_id = self._stack_output(stack, 'router')
-        self.assertIsInstance(router_id, six.string_types)
+        self.assertIsInstance(router_id, str)
         uuid.UUID(router_id)
 
         self._stack_delete(stack_id)

@@ -12,7 +12,6 @@
 
 
 from heatclient import exc
-import six
 from tempest.lib import decorators
 
 from heat_tempest_plugin.common import test
@@ -146,7 +145,7 @@ outputs:
                      'at region "DARKHOLE" due to '
                      '"(?:public|internal|admin)(?:URL)? endpoint for '
                      'orchestration service in DARKHOLE region not found"')
-        self.assertRegex(six.text_type(ex), error_msg)
+        self.assertRegex(str(ex), error_msg)
 
     @decorators.idempotent_id('b2190dfc-d223-4595-b168-6c42b0f3a3e5')
     def test_stack_resource_validation_fail(self):
@@ -159,7 +158,7 @@ outputs:
                      'endpoint at region "%s" due to '
                      '"ERROR: The template section is '
                      'invalid: resource"') % self.conf.region
-        self.assertEqual(error_msg, six.text_type(ex))
+        self.assertEqual(error_msg, str(ex))
 
     @decorators.idempotent_id('141f0478-121b-4e61-bde7-d5551bfd1fc2')
     def test_stack_update(self):

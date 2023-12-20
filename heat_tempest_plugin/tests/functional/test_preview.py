@@ -11,7 +11,6 @@
 #    under the License.
 
 from heatclient import exc
-import six
 from tempest.lib import decorators
 
 from heat_tempest_plugin.tests.functional import functional_base
@@ -133,7 +132,7 @@ parameters:
 
         self.assertIn('Property error: : resources.two.properties.value: '
                       ': The Parameter (missing) was not provided.',
-                      six.text_type(excp))
+                      str(excp))
 
     @decorators.idempotent_id('0449113c-ff90-4f2b-8825-27ea35c1983f')
     def test_nested_pass(self):

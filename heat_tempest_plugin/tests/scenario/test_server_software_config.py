@@ -11,7 +11,6 @@
 #    under the License.
 
 from heatclient.common import template_utils
-import six
 from tempest.lib import decorators
 
 from heat_tempest_plugin.tests.scenario import scenario_base
@@ -89,7 +88,7 @@ class SoftwareConfigIntegrationTest(scenario_base.ScenarioTestsBase):
         # config isn't re-triggered
         complete_deployments = dict((d['name'], d) for d in
                                     complete_server_metadata['deployments'])
-        for k, v in six.iteritems(deployments):
+        for k, v in deployments.items():
             self.assertEqual(v, complete_deployments[k])
 
         stack = self.client.stacks.get(sid)

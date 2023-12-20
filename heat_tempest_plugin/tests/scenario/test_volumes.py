@@ -14,7 +14,6 @@
 from cinderclient import exceptions as cinder_exceptions
 import copy
 from oslo_log import log as logging
-import six
 from tempest.lib import decorators
 
 from heat_tempest_plugin.common import exceptions
@@ -44,7 +43,7 @@ class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
     def _outputs_verify(self, stack, expected_status='available'):
         self.assertEqual(expected_status,
                          self._stack_output(stack, 'status'))
-        self.assertEqual(six.text_type(self.volume_size),
+        self.assertEqual(str(self.volume_size),
                          self._stack_output(stack, 'size'))
         self.assertEqual(self.volume_description,
                          self._stack_output(stack, 'display_description'))
