@@ -24,6 +24,7 @@ LOG = logging.getLogger(__name__)
 
 
 @test.requires_service_feature('volume', 'backup')
+@test.requires_service('cinder')
 class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
     """Class is responsible for testing of volume backup."""
 

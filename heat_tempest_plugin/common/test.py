@@ -108,6 +108,22 @@ def requires_resource_type(resource_type):
     return decorator
 
 
+def requires_service(service):
+    '''Decorator for tests requiring a specific service being available.
+
+    The decorated test will be skipped when a service is not available. This
+    based on the [service_available] options implemented in tempest
+    '''
+    def decorator(test_method):
+        if not getattr(config.CONF.service_available, service, True):
+            skipper = testtools.skip(
+                "%s service not available, skipping test." % service)
+            return skipper(test_method)
+        else:
+            return test_method
+    return decorator
+
+
 def requires_service_type(service_type):
     '''Decorator for tests requiring a specific service being available.
 
@@ -124,7 +140,7 @@ def requires_service_type(service_type):
                 service_type, conf.region, conf.endpoint_type)
         except kc_exceptions.EndpointNotFound:
             skipper = testtools.skip(
-                "%s service not available, skipping test." % service_type)
+                "%s service type not available, skipping test." % service_type)
             return skipper(test_method)
         else:
             return test_method
