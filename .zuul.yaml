@@ -1,4 +1,10 @@
 - job:
+    name: heat-functional-2023-2
+    parent: heat-functional
+    nodeset: openstack-single-node-jammy
+    override-checkout: stable/2023.2
+
+- job:
     name: heat-functional-2023-1
     parent: heat-functional
     nodeset: openstack-single-node-jammy
@@ -10,12 +16,6 @@
     nodeset: openstack-single-node-focal
     override-checkout: stable/zed
 
-- job:
-    name: heat-functional-yoga
-    parent: heat-functional
-    nodeset: openstack-single-node-focal
-    override-checkout: stable/yoga
-
 - project:
     queue: heat
     templates:
@@ -25,9 +25,9 @@
       jobs:
         - heat-functional
         - heat-functional-legacy
+        - heat-functional-2023-2
         - heat-functional-2023-1
         - heat-functional-zed
-        - heat-functional-yoga
     gate:
       jobs:
         - heat-functional
