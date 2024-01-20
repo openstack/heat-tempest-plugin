@@ -168,7 +168,7 @@ def requires_feature(feature):
 
 
 def requires_service_feature(service, feature):
-    '''Decorator for tests requring specific service feature enabled in tempest.
+    '''Decorator for tests requring specific service feature
 
     The decorated test will be skipped when a specific feature is disabled.
     '''
