@@ -96,12 +96,11 @@ resources:
     type: OS::Heat::UpdateWaitConditionHandle
 
   wait_condition:
-    type: AWS::CloudFormation::WaitCondition
+    type: OS::Heat::WaitCondition
     depends_on: instance
     properties:
-      Count: 1
-      Handle: { get_resource: wait_handle }
-      Timeout: { get_param: timeout }
+      handle: { get_resource: wait_handle }
+      timeout: { get_param: timeout }
 
 
 outputs:
@@ -122,4 +121,4 @@ outputs:
 
   testfile_data:
     description: Contents of /mnt/testfile from the mounted volume
-    value: { get_attr: ['wait_condition', 'Data'] }
+    value: { get_attr: ['wait_condition', 'data'] }
