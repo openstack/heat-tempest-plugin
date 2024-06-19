@@ -31,7 +31,8 @@ class ServerSignalIntegrationTest(scenario_base.ScenarioTestsBase):
             'image': image,
             'public_net': self.conf.floating_network_name,
             'timeout': self.conf.build_timeout,
-            'user_data_format': user_data_format
+            'user_data_format': user_data_format,
+            'dns_servers': self.conf.dns_servers
         }
         if self.conf.vm_to_heat_api_insecure:
             parameters['wc_extra_args'] = '--insecure'

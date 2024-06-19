@@ -167,6 +167,9 @@ HeatGroup = [
     cfg.StrOpt('credential_secret_id',
                help="Barbican secret id which storing cloud credential in "
                "remote site."),
+    cfg.ListOpt('dns_servers',
+                default=(['8.8.8.8', '8.8.4.4']),
+                help='Configure custom DNS servers'),
     cfg.BoolOpt('vm_to_heat_api_insecure',
                 default=False,
                 help="Set this to True if VM images used for tests "
