@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``auth_version`` option has been deprecated and has no effect. This
+    option will be removed in a future release.

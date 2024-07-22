@@ -59,6 +59,9 @@ HeatGroup = [
     cfg.StrOpt('auth_url',
                help="Full URI of the OpenStack Identity API (Keystone)."),
     cfg.StrOpt('auth_version',
+               deprecated_for_removal=True,
+               deprecated_reason='Identity v2 API was removed and v3 is '
+                                 'the only available identity API version now',
                help="OpenStack Identity API version."),
     cfg.StrOpt('user_domain_name',
                help="User domain name, if keystone v3 auth_url "

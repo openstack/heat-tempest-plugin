@@ -62,18 +62,16 @@ class ClientManager(object):
     calling various OpenStack APIs.
     """
 
-    CINDERCLIENT_VERSION = '3'
-    HEATCLIENT_VERSION = '1'
+    CINDER_API_VERSION = '3'
+    GNOCCHI_API_VERSION = '1'
+    HEAT_API_VERSION = '1'
+    KEYSTONE_API_VERSION = '3'
     NOVA_API_VERSION = '2.1'
-    GNOCCHI_VERSION = '1'
 
     def __init__(self, conf, admin_credentials=False):
         self.conf = conf
         self.admin_credentials = admin_credentials
 
-        self.auth_version = self.conf.auth_version
-        if not self.auth_version:
-            self.auth_version = self.conf.auth_url.split('/v')[1]
         self.insecure = self.conf.disable_ssl_certificate_validation
         self.ca_file = self.conf.ca_file
 
@@ -108,7 +106,7 @@ class ClientManager(object):
             session = self.identity_client.session
 
         return heat_client.Client(
-            self.HEATCLIENT_VERSION,
+            self.HEAT_API_VERSION,
             endpoint,
             session=session,
             endpoint_type=self.conf.endpoint_type,
@@ -126,15 +124,12 @@ class ClientManager(object):
             'username': self._username(),
             'password': self._password(),
             'project_name': self._project_name(),
-            'auth_url': self.conf.auth_url
+            'auth_url': self.conf.auth_url,
+            'user_domain_id': user_domain_id,
+            'user_domain_name': user_domain_name,
+            'project_domain_id': project_domain_id,
+            'project_domain_name': project_domain_name
         }
-        # keystone v2 can't ignore domain details
-        if self.auth_version == '3':
-            kwargs.update({
-                'user_domain_id': user_domain_id,
-                'project_domain_id': project_domain_id,
-                'user_domain_name': user_domain_name,
-                'project_domain_name': project_domain_name})
         auth = password.Password(**kwargs)
         if self.insecure:
             verify_cert = False
@@ -164,7 +159,7 @@ class ClientManager(object):
 
     def _get_volume_client(self):
         return cinder_client.Client(
-            self.CINDERCLIENT_VERSION,
+            self.CINDER_API_VERSION,
             session=self.identity_client.session,
             endpoint_type=self.conf.endpoint_type,
             region_name=self.conf.region,
@@ -172,7 +167,7 @@ class ClientManager(object):
 
     def _get_object_client(self):
         args = {
-            'auth_version': self.auth_version,
+            'auth_version': self.KEYSTONE_API_VERSION,
             'session': self.identity_client.session,
             'cacert': self.ca_file,
             'insecure': self.insecure,
@@ -190,5 +185,5 @@ class ClientManager(object):
             'session': self.identity_client.session,
             'adapter_options': adapter_options
         }
-        return gnocchi_client.Client(version=self.GNOCCHI_VERSION,
+        return gnocchi_client.Client(version=self.GNOCCHI_API_VERSION,
                                      **args)
