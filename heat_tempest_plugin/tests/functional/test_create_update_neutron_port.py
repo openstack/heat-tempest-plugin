@@ -31,6 +31,9 @@ resources:
       enable_dhcp: false
       network: { get_resource: net }
       cidr: 11.11.11.0/24
+      allocation_pools:
+        - start: 11.11.11.2
+          end: 11.11.11.9
   port:
     type: OS::Neutron::Port
     properties:

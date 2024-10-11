@@ -33,6 +33,9 @@ resources:
     properties:
       network: {get_resource: net}
       cidr: 11.11.11.0/24
+      allocation_pools:
+        - start: 11.11.11.2
+          end: 11.11.11.9
   security_group:
     type: OS::Neutron::SecurityGroup
     properties:
@@ -76,6 +79,9 @@ resources:
     properties:
       network: {get_resource: net}
       cidr: 11.11.11.0/24
+      allocation_pools:
+        - start: 11.11.11.2
+          end: 11.11.11.9
   port:
     type: OS::Neutron::Port
     properties:
@@ -111,12 +117,18 @@ resources:
       network: {get_resource: net}
       cidr: 11.11.11.0/24
       name: subnet_a
+      allocation_pools:
+        - start: 11.11.11.2
+          end: 11.11.11.9
   subnet_b:
     type: OS::Neutron::Subnet
     properties:
       network: {get_resource: net}
       cidr: 12.12.12.0/24
       name: subnet_b
+      allocation_pools:
+        - start: 12.12.12.2
+          end: 12.12.12.9
   server:
     type: OS::Nova::Server
     properties:
@@ -147,6 +159,9 @@ resources:
       name: the_subnet
       network: {get_resource: net}
       cidr: 11.11.11.0/24
+      allocation_pools:
+        - start: 11.11.11.2
+          end: 11.11.11.9
   server:
     type: OS::Nova::Server
     properties:
