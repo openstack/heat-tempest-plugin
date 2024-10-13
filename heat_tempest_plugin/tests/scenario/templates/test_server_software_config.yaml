@@ -35,7 +35,6 @@ resources:
   the_sg:
     type: OS::Neutron::SecurityGroup
     properties:
-      name: the_sg
       description: Ping and SSH
       rules:
       - protocol: icmp
