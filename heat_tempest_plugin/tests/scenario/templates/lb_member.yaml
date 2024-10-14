@@ -1,0 +1,69 @@
+heat_template_version: pike
+parameters:
+  image:
+    type: string
+  flavor:
+    type: string
+  network:
+    type: string
+  sec_group:
+    type: string
+  pool:
+    type: string
+  app_port:
+    type: number
+  timeout:
+    type: number
+    default: 120
+  subnet:
+    type: string
+
+resources:
+  server:
+    type: OS::Nova::Server
+    properties:
+      image: {get_param: image}
+      flavor: {get_param: flavor}
+      networks:
+        - network: {get_param: network}
+      security_groups:
+        - {get_param: sec_group}
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #! /bin/sh -v
+            Body=$(hostname)
+            Response="HTTP/1.1 200 OK\r\nContent-Length: ${#Body}\r\n\r\n$Body"
+            while true; do
+                wc_notify --data-binary '{"status": "SUCCESS"}'
+                if [ $? -eq 0 ]; then
+                    break
+                fi
+                sleep 10
+            done
+            while true ; do
+                echo -e $Response | nc -llp PORT
+            done
+          params:
+            PORT: {get_param: app_port}
+            wc_notify: { get_attr: [handle, curl_cli]}
+
+  handle:
+    type: OS::Heat::WaitConditionHandle
+
+  waiter:
+    type: OS::Heat::WaitCondition
+    depends_on: server
+    properties:
+      timeout: {get_param: timeout}
+      handle: {get_resource: handle}
+
+  pool_member:
+    type: OS::Octavia::PoolMember
+    depends_on: waiter
+    properties:
+      address: {get_attr: [server, networks, {get_param: network}, 0]}
+      pool: {get_param: pool}
+      protocol_port: {get_param: app_port}
+      subnet: {get_param: subnet}
