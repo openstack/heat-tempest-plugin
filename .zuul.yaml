@@ -16,12 +16,6 @@
     nodeset: openstack-single-node-jammy
     override-checkout: stable/2023.2
 
-- job:
-    name: heat-functional-2023-1
-    parent: heat-functional
-    nodeset: openstack-single-node-jammy
-    override-checkout: stable/2023.1
-
 - project:
     queue: heat
     templates:
@@ -34,7 +28,6 @@
         - heat-functional-2024-2
         - heat-functional-2024-1
         - heat-functional-2023-2
-        - heat-functional-2023-1
     gate:
       jobs:
         - heat-functional
