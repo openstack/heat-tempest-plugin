@@ -1,4 +1,10 @@
 - job:
+    name: heat-functional-2025-1
+    parent: heat-functional
+    nodeset: openstack-single-node-noble
+    override-checkout: stable/2025.1
+
+- job:
     name: heat-functional-2024-2
     parent: heat-functional
     nodeset: openstack-single-node-jammy
@@ -25,6 +31,7 @@
       jobs:
         - heat-functional
         - heat-functional-legacy
+        - heat-functional-2025-1
         - heat-functional-2024-2
         - heat-functional-2024-1
         - heat-functional-2023-2
