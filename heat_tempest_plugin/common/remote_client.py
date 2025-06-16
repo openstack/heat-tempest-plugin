@@ -33,7 +33,7 @@ class Client(object):
         self.password = password
         if isinstance(pkey, str):
             pkey = paramiko.RSAKey.from_private_key(
-                io.cStringIO(str(pkey)))
+                io.StringIO(str(pkey)))
         self.pkey = pkey
         self.look_for_keys = look_for_keys
         self.key_filename = key_filename
