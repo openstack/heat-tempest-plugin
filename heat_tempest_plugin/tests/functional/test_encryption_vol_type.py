@@ -12,6 +12,7 @@
 
 from tempest.lib import decorators
 
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 test_encryption_vol_type = {
@@ -38,6 +39,7 @@ test_encryption_vol_type = {
 }
 
 
+@test.requires_service('cinder')
 class EncryptionVolTypeTest(functional_base.FunctionalTestsBase):
     def setUp(self):
         super(EncryptionVolTypeTest, self).setUp()
