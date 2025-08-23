@@ -17,6 +17,7 @@ from heat_tempest_plugin.tests.scenario import scenario_base
 
 
 @test.requires_resource_type('OS::Octavia::LoadBalancer')
+@test.requires_service('octavia')
 class LoadBalancerTest(scenario_base.ScenarioTestsBase):
     def setUp(self):
         super(LoadBalancerTest, self).setUp()

@@ -21,6 +21,8 @@ from heat_tempest_plugin.tests.scenario import scenario_base
 LOG = logging.getLogger(__name__)
 
 
+@test.requires_service('aodh')
+@test.requires_service('gnocchi')
 class AodhAlarmTest(scenario_base.ScenarioTestsBase):
     """Class is responsible for testing of aodh usage."""
     def setUp(self):

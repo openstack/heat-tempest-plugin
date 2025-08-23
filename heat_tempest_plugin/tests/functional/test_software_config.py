@@ -184,6 +184,7 @@ properties:
 
 
 @test.requires_service_type('messaging')
+@test.requires_service('zaqar')
 class ZaqarSignalTransportTest(functional_base.FunctionalTestsBase):
     server_template = '''
 heat_template_version: "2013-05-23"
