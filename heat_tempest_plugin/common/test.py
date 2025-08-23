@@ -18,7 +18,6 @@ import time
 import fixtures
 from heatclient import exc as heat_exceptions
 from keystoneauth1 import exceptions as kc_exceptions
-from neutronclient.common import exceptions as network_exceptions
 from oslo_log import log as logging
 from oslo_utils import timeutils
 import testscenarios
@@ -293,13 +292,6 @@ class HeatIntegrationTest(testtools.testcase.WithAttributes,
         for net in networks['networks']:
             if net['name'] == net_name:
                 return net
-
-    def is_network_extension_supported(self, extension_alias):
-        try:
-            self.network_client.show_extension(extension_alias)
-        except network_exceptions.NeutronClientException:
-            return False
-        return True
 
     @staticmethod
     def _stack_output(stack, output_key, validate_errors=True):
