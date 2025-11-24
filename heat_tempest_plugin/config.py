@@ -10,16 +10,15 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from oslo_config import cfg
-
 import os
+
+from oslo_config import cfg
+from tempest import config
+
 
 default_template = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     'tests/scenario/templates/boot_config_none_env.yaml')
-
-service_available_group = cfg.OptGroup(name="service_available",
-                                       title="Available OpenStack Services")
 
 ServiceAvailableGroup = [
     cfg.BoolOpt("heat",
@@ -198,4 +197,4 @@ HeatFeaturesGroup = [
 def list_opts():
     yield heat_group.name, HeatGroup
     yield heat_features_group.name, HeatFeaturesGroup
-    yield service_available_group.name, ServiceAvailableGroup
+    yield config.service_available_group.name, ServiceAvailableGroup

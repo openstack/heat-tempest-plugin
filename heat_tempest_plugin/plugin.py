@@ -55,7 +55,7 @@ class HeatTempestPlugin(plugins.TempestPlugin):
         conf (ConfigOpts): The conf object that can be used to register
         additional options on.
         """
-        config.register_opt_group(conf, heat_config.service_available_group,
+        config.register_opt_group(conf, config.service_available_group,
                                   heat_config.ServiceAvailableGroup)
         config.register_opt_group(conf, heat_config.heat_group,
                                   heat_config.HeatGroup)
@@ -70,7 +70,9 @@ class HeatTempestPlugin(plugins.TempestPlugin):
         Return type: list
         """
 
-        return [(heat_config.heat_group.name,
+        return [(config.service_available_group.name,
+                 heat_config.ServiceAvailableGroup),
+                (heat_config.heat_group.name,
                  heat_config.HeatGroup),
                 (heat_config.heat_features_group.name,
                  heat_config.HeatFeaturesGroup)]
