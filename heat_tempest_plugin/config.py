@@ -128,6 +128,7 @@ HeatGroup = [
                     "succeed."),
     cfg.IntOpt('ip_version_for_ssh',
                default=4,
+               choices=[4, 6],
                help="IP version used for SSH connections."),
     cfg.IntOpt('ssh_channel_timeout',
                default=60,
