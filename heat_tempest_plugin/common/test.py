@@ -28,6 +28,7 @@ from heat_tempest_plugin.common import exceptions
 from heat_tempest_plugin.common import remote_client
 from heat_tempest_plugin.services import clients
 from tempest import config
+from tempest import test
 
 LOG = logging.getLogger(__name__)
 _LOG_FORMAT = "%(levelname)8s [%(name)s] %(message)s"
@@ -177,9 +178,7 @@ def requires_service_feature(service, feature):
     return decorator
 
 
-class HeatIntegrationTest(testtools.testcase.WithAttributes,
-                          testscenarios.WithScenarios,
-                          testtools.TestCase):
+class HeatIntegrationTest(test.BaseTestCase, testscenarios.WithScenarios):
 
     def setUp(self):
         super(HeatIntegrationTest, self).setUp()
@@ -195,14 +194,14 @@ class HeatIntegrationTest(testtools.testcase.WithAttributes,
                              'No username configured')
         self.assertIsNotNone(self.conf.password,
                              'No password configured')
-        self.setup_clients(self.conf)
+        self.setup_plugin_clients(self.conf)
         self.useFixture(fixtures.FakeLogger(format=_LOG_FORMAT))
         if self.conf.disable_ssl_certificate_validation:
             self.verify_cert = False
         else:
             self.verify_cert = self.conf.ca_file or True
 
-    def setup_clients(self, conf, admin_credentials=False):
+    def setup_plugin_clients(self, conf, admin_credentials=False):
         self.manager = clients.ClientManager(conf, admin_credentials)
         self.identity_client = self.manager.identity_client
         self.orchestration_client = self.manager.orchestration_client
@@ -215,7 +214,7 @@ class HeatIntegrationTest(testtools.testcase.WithAttributes,
         self.client = self.orchestration_client
 
     def setup_clients_for_admin(self):
-        self.setup_clients(self.conf, True)
+        self.setup_plugin_clients(self.conf, True)
 
     def get_remote_client(self, server_or_ip, username, private_key=None):
         if isinstance(server_or_ip, str):
