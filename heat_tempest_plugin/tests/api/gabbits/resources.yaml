@@ -98,5 +98,9 @@ tests:
 - name: delete stack with resources
   desc: 0edc4fdc-811d-4d27-a0dd-6ec4db2bda6e
   DELETE: /stacks/$ENVIRON['PREFIX']-rsrcstack
-  redirects: True
+  status: 302
+
+- name: delete stack with resources
+  desc: ceb726d0-796e-45d9-aaf0-69dfadce0cca
+  DELETE: $LOCATION
   status: 204

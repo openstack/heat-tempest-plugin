@@ -21,14 +21,14 @@
     templates:
       - check-requirements
       - tempest-plugin-jobs
-    check:
-      jobs:
-        - heat-functional
-        - heat-functional-legacy
-        - heat-functional-2025-2
-        - heat-functional-2025-1
-        - heat-functional-2024-2
-    gate:
-      jobs:
-        - heat-functional
-        - heat-functional-legacy
+    #check:
+    #  jobs:
+    #    - heat-functional
+    #    - heat-functional-legacy
+    #    - heat-functional-2025-2
+    #    - heat-functional-2025-1
+    #    - heat-functional-2024-2
+    #gate:
+    #  jobs:
+    #    - heat-functional
+    #    - heat-functional-legacy

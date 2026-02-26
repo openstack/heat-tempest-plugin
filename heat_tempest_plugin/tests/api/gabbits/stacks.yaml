@@ -175,5 +175,9 @@ tests:
 - name: delete stack
   desc: bcf4c359-0a64-4652-b465-df3f688a9d4d
   DELETE: /stacks/$ENVIRON['PREFIX']-stack
-  redirects: True
+  status: 302
+
+- name: delete envstack
+  desc: 37a650c1-1e18-4220-9499-3d923adda6b2
+  DELETE: $LOCATION
   status: 204
