@@ -110,7 +110,7 @@ class ClientManager(object):
             endpoint,
             session=session,
             endpoint_type=self.conf.endpoint_type,
-            service_type='orchestration',
+            service_type=self.conf.catalog_type,
             region_name=self.conf.region,
             username=self._username(),
             password=self._password())
