@@ -15,7 +15,6 @@ import re
 import subprocess
 import time
 
-import fixtures
 from heatclient import exc as heat_exceptions
 from keystoneauth1 import exceptions as kc_exceptions
 from oslo_log import log as logging
@@ -31,7 +30,6 @@ from tempest import config
 from tempest import test
 
 LOG = logging.getLogger(__name__)
-_LOG_FORMAT = "%(levelname)8s [%(name)s] %(message)s"
 _resource_types = None
 
 
@@ -195,7 +193,6 @@ class HeatIntegrationTest(test.BaseTestCase, testscenarios.WithScenarios):
         self.assertIsNotNone(self.conf.password,
                              'No password configured')
         self.setup_plugin_clients(self.conf)
-        self.useFixture(fixtures.FakeLogger(format=_LOG_FORMAT))
         if self.conf.disable_ssl_certificate_validation:
             self.verify_cert = False
         else:
