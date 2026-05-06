@@ -13,7 +13,6 @@
 import os
 
 from oslo_config import cfg
-from tempest import config
 
 
 default_template = os.path.join(
@@ -192,9 +191,3 @@ HeatFeaturesGroup = [
                 default=False,
                 help="If false, skip multi-cloud tests for remote stack")
 ]
-
-
-def list_opts():
-    yield heat_group.name, HeatGroup
-    yield heat_features_group.name, HeatFeaturesGroup
-    yield config.service_available_group.name, ServiceAvailableGroup
