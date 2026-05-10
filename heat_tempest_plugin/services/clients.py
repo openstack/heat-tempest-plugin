@@ -19,7 +19,6 @@ from keystoneauth1.identity.generic import password
 from keystoneauth1 import session
 from neutronclient.v2_0 import client as neutron_client
 from novaclient import client as nova_client
-from swiftclient import client as swift_client
 
 
 class KeystoneWrapperClient(object):
@@ -80,7 +79,6 @@ class ClientManager(object):
         self.compute_client = self._get_compute_client()
         self.network_client = self._get_network_client()
         self.volume_client = self._get_volume_client()
-        self.object_client = self._get_object_client()
         self.metric_client = self._get_metric_client()
 
     def _username(self):
@@ -164,18 +162,6 @@ class ClientManager(object):
             endpoint_type=self.conf.endpoint_type,
             region_name=self.conf.region,
             http_log_debug=True)
-
-    def _get_object_client(self):
-        args = {
-            'auth_version': self.KEYSTONE_API_VERSION,
-            'session': self.identity_client.session,
-            'cacert': self.ca_file,
-            'insecure': self.insecure,
-            'os_options': {'endpoint_type': self.conf.endpoint_type,
-                           'region_name': self.conf.region,
-                           'service_type': 'object-store'},
-        }
-        return swift_client.Connection(**args)
 
     def _get_metric_client(self):
 
