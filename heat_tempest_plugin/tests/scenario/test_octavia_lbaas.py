@@ -16,6 +16,9 @@ from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.scenario import scenario_base
 
 
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 @test.requires_resource_type('OS::Octavia::LoadBalancer')
 @test.requires_service('octavia')
 class LoadBalancerTest(scenario_base.ScenarioTestsBase):

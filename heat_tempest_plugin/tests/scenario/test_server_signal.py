@@ -16,9 +16,13 @@ import json
 from tempest.lib import decorators
 
 from heat_tempest_plugin.common import exceptions
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.scenario import scenario_base
 
 
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 class ServerSignalIntegrationTest(scenario_base.ScenarioTestsBase):
     """Test a server in a created network can signal to heat."""
 

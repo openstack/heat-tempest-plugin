@@ -23,8 +23,11 @@ from heat_tempest_plugin.tests.scenario import scenario_base
 LOG = logging.getLogger(__name__)
 
 
-@test.requires_service_feature('volume', 'backup')
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 @test.requires_service('cinder')
+@test.requires_service_feature('volume', 'backup')
 class VolumeBackupRestoreIntegrationTest(scenario_base.ScenarioTestsBase):
     """Class is responsible for testing of volume backup."""
 

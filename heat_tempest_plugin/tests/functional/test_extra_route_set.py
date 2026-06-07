@@ -59,6 +59,7 @@ def _routes_to_set(routes):
 
 
 @test.requires_resource_type('OS::Neutron::ExtraRouteSet')
+@test.requires_service('neutron')
 class ExtraRouteSetTest(functional_base.FunctionalTestsBase):
 
     def _create(self, template_routes):

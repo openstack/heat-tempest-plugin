@@ -13,6 +13,7 @@
 from heatclient.common import template_utils
 from tempest.lib import decorators
 
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.scenario import scenario_base
 
 CFG1_SH = '''#!/bin/sh
@@ -40,6 +41,9 @@ $::deploy_server_id during $::deploy_action",
 '''
 
 
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 class SoftwareConfigIntegrationTest(scenario_base.ScenarioTestsBase):
 
     def setUp(self):
