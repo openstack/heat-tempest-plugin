@@ -12,6 +12,7 @@
 
 from tempest.lib import decorators
 
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -56,6 +57,7 @@ outputs:
 '''
 
 
+@test.requires_service('neutron')
 class UpdatePortTest(functional_base.FunctionalTestsBase):
 
     def get_port_id_and_outputs(self, stack_identifier):

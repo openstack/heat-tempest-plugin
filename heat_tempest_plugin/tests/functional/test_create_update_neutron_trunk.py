@@ -74,6 +74,7 @@ outputs:
 
 
 @test.requires_resource_type('OS::Neutron::Trunk')
+@test.requires_service('neutron')
 class UpdateTrunkTest(functional_base.FunctionalTestsBase):
 
     @staticmethod

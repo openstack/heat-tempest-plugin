@@ -15,9 +15,13 @@ import json
 from tempest.lib import decorators
 
 from heat_tempest_plugin.common import exceptions
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.scenario import scenario_base
 
 
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 class CfnInitIntegrationTest(scenario_base.ScenarioTestsBase):
     """Testing cfn-init and cfn-signal workability."""
 

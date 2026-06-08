@@ -12,9 +12,13 @@
 
 from tempest.lib import decorators
 
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 class OSWaitCondition(functional_base.FunctionalTestsBase):
 
     template = '''

@@ -27,6 +27,9 @@ from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 class ParallelDeploymentsTest(functional_base.FunctionalTestsBase):
     server_template = '''
 heat_template_version: "2013-05-23"
@@ -185,6 +188,9 @@ properties:
 
 @test.requires_service_type('messaging')
 @test.requires_service('zaqar')
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 class ZaqarSignalTransportTest(functional_base.FunctionalTestsBase):
     server_template = '''
 heat_template_version: "2013-05-23"

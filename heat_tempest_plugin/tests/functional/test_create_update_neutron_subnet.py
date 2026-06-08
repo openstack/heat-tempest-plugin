@@ -12,6 +12,7 @@
 
 from tempest.lib import decorators
 
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -36,6 +37,7 @@ outputs:
 '''
 
 
+@test.requires_service('neutron')
 class UpdateSubnetTest(functional_base.FunctionalTestsBase):
 
     def get_outputs(self, stack_identifier, output_key):

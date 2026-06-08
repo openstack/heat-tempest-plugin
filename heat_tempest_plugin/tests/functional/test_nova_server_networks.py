@@ -12,6 +12,7 @@
 
 from tempest.lib import decorators
 
+from heat_tempest_plugin.common import test
 from heat_tempest_plugin.tests.functional import functional_base
 
 
@@ -184,6 +185,9 @@ outputs:
 '''
 
 
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 class CreateServerTest(functional_base.FunctionalTestsBase):
 
     def get_outputs(self, stack_identifier, output_key):
@@ -244,6 +248,9 @@ class CreateServerTest(functional_base.FunctionalTestsBase):
             parameters=parms)
 
 
+@test.requires_service('glance')
+@test.requires_service('nova')
+@test.requires_service('neutron')
 class UpdateServerNetworksTest(functional_base.FunctionalTestsBase):
     def setUp(self):
         super(UpdateServerNetworksTest, self).setUp()
