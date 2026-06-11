@@ -155,6 +155,7 @@ HeatGroup = [
                      "convergence enabled."),
     cfg.IntOpt('volume_size',
                default=1,
+               min=1,
                help='Default size in GB for volumes created by volumes tests'),
     cfg.IntOpt('connectivity_timeout',
                default=120,
