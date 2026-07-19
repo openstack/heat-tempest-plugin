@@ -165,7 +165,6 @@ HeatGroup = [
                default=('heat-config-notify'),
                help="Path to the script heat-config-notify"),
     cfg.StrOpt('hidden_stack_tag',
-               default='data-processing-cluster',
                help="Tag to be considered as hidden for stack tags tests"),
     cfg.StrOpt('credential_secret_id',
                help="Barbican secret id which storing cloud credential in "

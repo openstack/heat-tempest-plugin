@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The ``[heat_plugin] hidden_stack_tag`` option now defaults to ``None``, and
+    the test case to verify the behavior of hidden stack tags is skipped.
+    Set this option explicitly to one of the tags defined in
+    the ``[DEFAULT] hidden_stack_tags`` option in heat to enable this test.
