@@ -22,10 +22,7 @@ default_template = os.path.join(
 ServiceAvailableGroup = [
     cfg.BoolOpt("heat",
                 default=True,
-                help="Whether or not heat is expected to be available",
-                deprecated_opts=[cfg.DeprecatedOpt(
-                    'heat_plugin',
-                    group='service_available')]),
+                help="Whether or not heat is expected to be available"),
 ]
 
 heat_group = cfg.OptGroup(name="heat_plugin",

@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated ``[service_available] heat_plugin`` option has been removed.
+    Use the ``[service_available] heat`` option instead.
