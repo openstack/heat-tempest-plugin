@@ -30,7 +30,7 @@ parameters:
   rescan_timeout:
     type: number
     description: Max number of seconds to wait for volume after rescan
-    default: 120
+    default: 240
 
   network:
     type: string
@@ -87,13 +87,26 @@ resources:
             done
             if grep -q dev_name /proc/partitions
             then
-              mkfs.ext4 /dev/dev_name
-              mount /dev/dev_name /mnt
-              echo "test_string" > /mnt/testfile
-              umount /mnt
-              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "SUCCESS", "Reason": "Test Complete", "Data": "Completed volume configuration.", "UniqueId": "instance1"}' "wc_url"
+              # The device can appear before the iSCSI path is ready for
+              # I/O, so retry until the write and read-back succeed.
+              for i in $(seq 1 rescan_timeout)
+              do
+                if mkfs.ext4 -F /dev/dev_name >/dev/null 2>/tmp/vol.err && \
+                   mount /dev/dev_name /mnt 2>>/tmp/vol.err && \
+                   echo "test_string" > /mnt/testfile 2>>/tmp/vol.err && \
+                   [ "$(cat /mnt/testfile 2>>/tmp/vol.err)" = "test_string" ]
+                then
+                  umount /mnt
+                  curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "SUCCESS", "Reason": "Test Complete", "Data": "Completed volume configuration.", "UniqueId": "instance1"}' "wc_url"
+                  exit 0
+                fi
+                err=$(tail -1 /tmp/vol.err 2>/dev/null | tr -d '"\\' | cut -c 1-80)
+                umount /mnt 2>/dev/null
+                sleep 1
+              done
+              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary "{\"Status\": \"FAILURE\", \"Reason\": \"Device dev_name not ready for I/O, last error: $err\", \"Data\": \"Test Failed\", \"UniqueId\": \"instance1\"}" "wc_url"
             else
-              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "FAILURE", "Reason": "Test Failed", "Data": "Expected device dev_name not found.", "UniqueId": "instance1"}' "wc_url"
+              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "FAILURE", "Reason": "Device dev_name never appeared in the guest", "Data": "Test Failed", "UniqueId": "instance1"}' "wc_url"
             fi
           params:
             wc_url: { get_resource: wait_handle }

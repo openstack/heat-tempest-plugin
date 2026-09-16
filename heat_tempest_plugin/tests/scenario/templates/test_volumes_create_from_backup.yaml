@@ -25,7 +25,7 @@ parameters:
   rescan_timeout:
     type: number
     description: Max number of seconds to wait for volume after rescan
-    default: 120
+    default: 240
 
   backup_id:
     type: string
@@ -80,11 +80,17 @@ resources:
             done
             if grep -q dev_name /proc/partitions
             then
-              mount /dev/dev_name /mnt
-              TESTDATA=$(cat /mnt/testfile)
+              # The device can appear before the iSCSI path is ready for
+              # I/O, so retry the mount.
+              for i in $(seq 1 rescan_timeout)
+              do
+                mount /dev/dev_name /mnt && break
+                sleep 1
+              done
+              TESTDATA=$(cat /mnt/testfile 2>/dev/null)
               curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "SUCCESS", "Reason": "Test Complete", "Data": "Volume Data:'$TESTDATA'", "UniqueId": "instance1"}' "wc_url"
             else
-              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "FAILURE", "Reason": "Test Failed", "Data": "Expected device dev_name not found.", "UniqueId": "instance1"}' "wc_url"
+              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "FAILURE", "Reason": "Device dev_name not found in the guest", "Data": "Test Failed", "UniqueId": "instance1"}' "wc_url"
             fi
           params:
             wc_url: { get_resource: wait_handle }
