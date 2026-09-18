@@ -81,14 +81,27 @@ resources:
             if grep -q dev_name /proc/partitions
             then
               # The device can appear before the iSCSI path is ready for
-              # I/O, so retry the mount.
+              # I/O, so retry until the mount and read-back succeed.
               for i in $(seq 1 rescan_timeout)
               do
-                mount /dev/dev_name /mnt && break
+                umount -l /mnt 2>/dev/null
+                TESTDATA=""
+                if mount /dev/dev_name /mnt 2>>/tmp/vol.err
+                then
+                  TESTDATA=$(cat /mnt/testfile 2>/dev/null)
+                  # A failed umount means the filesystem could not be
+                  # cleanly detached; treat the volume as not ready.
+                  umount /mnt 2>>/tmp/vol.err || TESTDATA=""
+                fi
+                if [ -n "$TESTDATA" ]
+                then
+                  curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "SUCCESS", "Reason": "Test Complete", "Data": "Volume Data:'$TESTDATA'", "UniqueId": "instance1"}' "wc_url"
+                  exit 0
+                fi
+                err=$(tail -1 /tmp/vol.err 2>/dev/null | tr -d '"\\' | cut -c 1-80)
                 sleep 1
               done
-              TESTDATA=$(cat /mnt/testfile 2>/dev/null)
-              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "SUCCESS", "Reason": "Test Complete", "Data": "Volume Data:'$TESTDATA'", "UniqueId": "instance1"}' "wc_url"
+              curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary "{\"Status\": \"FAILURE\", \"Reason\": \"Device dev_name not ready for I/O, last error: $err\", \"Data\": \"Test Failed\", \"UniqueId\": \"instance1\"}" "wc_url"
             else
               curl wc_extra_args -X PUT -H 'Content-Type:' --data-binary '{"Status": "FAILURE", "Reason": "Device dev_name not found in the guest", "Data": "Test Failed", "UniqueId": "instance1"}' "wc_url"
             fi
