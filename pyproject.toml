@@ -1,3 +1,37 @@
 [build-system]
 requires = ["pbr>=6.1.1"]
 build-backend = "pbr.build"
+
+[project]
+name = "heat-tempest-plugin"
+description = "Tempest plugin heat-tempest-plugin"
+authors = [
+    {name = "OpenStack", email = "openstack-discuss@lists.openstack.org"},
+]
+readme = {file = "README.rst", content-type = "text/x-rst"}
+license = "Apache-2.0"
+dynamic = ["version", "dependencies"]
+requires-python = ">=3.11"
+classifiers = [
+    "Environment :: OpenStack",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+
+[project.urls]
+Homepage = "https://docs.openstack.org/heat/"
+Repository = "https://opendev.org/openstack/heat-tempest-plugin/"
+
+[project.entry-points."tempest.test_plugins"]
+heat = "heat_tempest_plugin.plugin:HeatTempestPlugin"
+
+[tool.setuptools.packages.find]
+include = ["heat_tempest_plugin*"]
