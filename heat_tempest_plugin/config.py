@@ -43,14 +43,10 @@ HeatGroup = [
                help="Admin API key to use when authentication.",
                secret=True),
     cfg.StrOpt('project_name',
-               help="Project name to use for API requests.",
-               deprecated_opts=[cfg.DeprecatedOpt(
-                   'tenant_name', group='heat_plugin')]),
+               help="Project name to use for API requests."),
     cfg.StrOpt('admin_project_name',
                default='admin',
-               help="Admin project name to use for admin API requests.",
-               deprecated_opts=[cfg.DeprecatedOpt(
-                   'admin_tenant_name', group='heat_plugin')]),
+               help="Admin project name to use for admin API requests."),
     cfg.URIOpt('auth_url',
                schemes=['http', 'https'],
                help="Full URI of the OpenStack Identity API (Keystone)."),

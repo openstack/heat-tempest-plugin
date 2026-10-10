@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The following deprecated ``[heat_plugin]`` options have been removed.
+
+    - ``tenant_name``
+    - ``admin_tenant_name``
