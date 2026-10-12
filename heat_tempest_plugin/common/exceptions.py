@@ -40,16 +40,8 @@ class IntegrationException(Exception):
         return self._error_string
 
 
-class InvalidCredentials(IntegrationException):
-    message = "Invalid Credentials"
-
-
 class TimeoutException(IntegrationException):
     message = "Request timed out"
-
-
-class BuildErrorException(IntegrationException):
-    message = "Server %(server_id)s failed to build and is in ERROR status"
 
 
 class StackBuildErrorException(IntegrationException):
