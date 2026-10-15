@@ -43,6 +43,13 @@ def load_tests(loader, tests, pattern):
                 conf.catalog_type, region=conf.region,
                 endpoint_type=conf.endpoint_type)
             os.environ['PREFIX'] = test.rand_name('api')
+            # Set the OS_TOKEN environment variable for gabbi templates
+            # ($ENVIRON['OS_TOKEN']) at listing time: test runners that
+            # flatten test suites, such as stestr's dynamic scheduler,
+            # never run the per-yaml suite-level fixtures that normally
+            # authenticate and set it, so gabbi raises a KeyError when it
+            # replaces the template while building each request.
+            os.environ['OS_TOKEN'] = manager.identity_client.auth_token
 
         # Catch the authentication exceptions that can happen if one of the
         # following conditions occur:
