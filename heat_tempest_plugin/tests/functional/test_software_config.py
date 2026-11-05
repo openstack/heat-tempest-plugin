@@ -19,6 +19,9 @@ import tempfile
 import time
 import yaml
 
+from heatclient import client as heat_client
+from keystoneauth1.identity.generic import password
+from keystoneauth1 import session as ks_session
 from oslo_utils import timeutils
 from tempest.lib import decorators
 
@@ -69,6 +72,7 @@ type: OS::Heat::SoftwareDeployments
 properties:
   config: {get_resource: config}
   servers: {'0': {get_param: server}}
+  signal_transport: HEAT_SIGNAL
 '''
 
     enable_cleanup = True
@@ -181,9 +185,22 @@ properties:
         for dep in server_metadata['deployments']:
             iv = dict((i['name'], i['value']) for i in dep['inputs'])
             sigurl = iv.get('deploy_signal_id')
-            requests.post(sigurl, data='{}',
-                          headers={'content-type': 'application/json'},
-                          verify=self.verify_cert)
+            if sigurl is not None:
+                requests.post(sigurl, data='{}',
+                              headers={'content-type': 'application/json'},
+                              verify=self.verify_cert)
+            else:
+                auth = password.Password(
+                    auth_url=iv['deploy_auth_url'],
+                    user_id=iv['deploy_user_id'],
+                    password=iv['deploy_password'],
+                    project_id=iv['deploy_project_id'])
+                sess = ks_session.Session(auth=auth, verify=self.verify_cert)
+                heat = heat_client.Client('1', session=sess)
+                heat.resources.signal(
+                    iv['deploy_stack_id'],
+                    iv['deploy_resource_name'],
+                    data={})
 
 
 @test.requires_service_type('messaging')
